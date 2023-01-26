@@ -26,5 +26,9 @@ django-celery-beat==2.3.0
 # Telegram
 python-telegram-bot==13.11  # last sync version
 
+
+# Typing
+pydantic
+
 # monitoring
 # sentry-sdk
