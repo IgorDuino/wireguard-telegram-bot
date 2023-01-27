@@ -1,6 +1,4 @@
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-
-from tgbot.handlers.onboarding.manage_data import SECRET_LEVEL_BUTTON
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 
 
 def start_menu() -> InlineKeyboardMarkup:
@@ -32,7 +30,7 @@ def main_menu() -> InlineKeyboardMarkup:
         InlineKeyboardButton("💻 Мои устройства", callback_data=f'main_menu:devices'),
         InlineKeyboardButton("👥 Пригласить друга", callback_data=f'main_menu:invoke_friend'),
     ],
-        [InlineKeyboardButton("💵 Оплатить", callback_data=f'main_menu:replenish_balance')],
+        [InlineKeyboardButton("💳 Оплатить", web_app=WebAppInfo(url='https://vpnbottest.cupsoft.ru/pay/'))],
         [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'main_menu:support')],
     ]
 
