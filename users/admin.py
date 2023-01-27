@@ -11,8 +11,6 @@ from users.forms import BroadcastForm
 from users.tasks import broadcast_message
 from tgbot.handlers.broadcast_message.utils import send_one_message
 
-from shop.models import VPNProfile, VPNServer
-
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -54,13 +52,3 @@ class UserAdmin(admin.ModelAdmin):
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
     list_display = ['id', 'user_id', 'created_at']
-
-
-@admin.register(VPNProfile)
-class VPNProfileAdmin(admin.ModelAdmin):
-    readonly_fields = ['name', 'is_active', 'id_on_server', 'ip', 'server', ]
-
-
-@admin.register(VPNServer)
-class VPNServerAdmin(admin.ModelAdmin):
-    pass
