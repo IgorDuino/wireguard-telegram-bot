@@ -64,6 +64,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
+CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*']
+
 INTERNAL_IPS = [
     # ...
     '127.0.0.1',
