@@ -11,7 +11,6 @@ def set_up_commands(bot_instance: Bot) -> None:
             'start': 'Start django bot 🚀',
             'stats': 'Statistics of bot 📊',
             'admin': 'Show admin info ℹ️',
-            'ask_location': 'Send location 📍',
             'broadcast': 'Broadcast message 📨',
             'export_users': 'Export users.csv 👥',
         },
@@ -19,7 +18,6 @@ def set_up_commands(bot_instance: Bot) -> None:
             'start': 'Iniciar el bot de django 🚀',
             'stats': 'Estadísticas de bot 📊',
             'admin': 'Mostrar información de administrador ℹ️',
-            'ask_location': 'Enviar ubicación 📍',
             'broadcast': 'Mensaje de difusión 📨',
             'export_users': 'Exportar users.csv 👥',
         },
@@ -27,7 +25,6 @@ def set_up_commands(bot_instance: Bot) -> None:
             'start': 'Démarrer le bot Django 🚀',
             'stats': 'Statistiques du bot 📊',
             'admin': "Afficher les informations d'administrateur ℹ️",
-            'ask_location': 'Envoyer emplacement 📍',
             'broadcast': 'Message de diffusion 📨',
             "export_users": 'Exporter users.csv 👥',
         },
@@ -36,7 +33,6 @@ def set_up_commands(bot_instance: Bot) -> None:
             'stats': 'Статистика бота 📊',
             'admin': 'Показать информацию для админов ℹ️',
             'broadcast': 'Отправить сообщение 📨',
-            'ask_location': 'Отправить локацию 📍',
             'export_users': 'Экспорт users.csv 👥',
         }
     }
