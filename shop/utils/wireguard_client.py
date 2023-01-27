@@ -1,6 +1,11 @@
 import requests
 from typing import Dict, Union
+import qrcode
+from io import BytesIO
 
+
+# TODO: rewrite to use aiohttp
+# TODO: use pydantic for models
 
 class AuthError(Exception):
     pass
@@ -51,24 +56,30 @@ class WireguardApiClient:
                 return client
         raise NotFoundError('Client not found')
 
-    def get_client_configuration(self, uuid) -> Union[str, None]:
+    def get_client_configuration(self, uuid) -> bytes:
         r = self.session.get(self.base_url + f'/wireguard/client/{uuid}/configuration')
         if r.status_code == 401:
             raise AuthError('Not Logged In')
         if r.status_code == 404:
             raise NotFoundError('Client not found')
-        return r.text
+        return r.text.encode()
 
-    def get_client_qr_code(self, uuid):
-        r = self.session.get(self.base_url + f'/wireguard/client/{uuid}/qrcode.svg')
-        if r.status_code == 401:
-            raise AuthError('Not Logged In')
-        if r.status_code == 404:
-            raise NotFoundError('Client not found')
+    def get_client_qr_code(self, uuid) -> bytes:
+        config = self.get_client_configuration(uuid)
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(config)
+        qr.make(fit=True)
+        img = qr.make_image(fill_color="black", back_color="white")
+        img_io = BytesIO()
+        img.save(img_io, 'PNG')
+        return img_io.getvalue()
 
-        return r.content
-
-    def add_client(self, name) -> Dict:
+    def create_profile(self, name) -> Dict:
         r = self.session.post(self.base_url + '/wireguard/client', json={'name': name})
         if r.status_code == 401:
             raise AuthError('Not Logged In')

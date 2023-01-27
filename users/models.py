@@ -10,6 +10,8 @@ from telegram.ext import CallbackContext
 from tgbot.handlers.utils.info import extract_user_data_from_update
 from utils.models import CreateUpdateTracker, nb, CreateTracker, GetOrNoneManager
 
+import datetime
+
 
 class AdminUserManager(Manager):
     def get_queryset(self):
@@ -30,6 +32,9 @@ class User(CreateUpdateTracker):
 
     objects = GetOrNoneManager()  # user = User.objects.get_or_none(user_id=<some_id>)
     admins = AdminUserManager()  # User.admins.all()
+
+    is_trial = models.BooleanField(default=True)
+    trial_ends_at = models.DateTimeField(**nb, default=datetime.datetime.now)
 
     def __str__(self):
         return f'@{self.username}' if self.username is not None else f'{self.user_id}'
