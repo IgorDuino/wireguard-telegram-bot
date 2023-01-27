@@ -1,67 +1,17 @@
+{% load static %}
+{#{% load static %}#}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>TestVPN</title>
 
-    <script src="https://widget.cloudpayments.ru/bundles/paymentblocks.js"></script>
+    <script src="https://widget.cloudpayments.ru/bundles/cloudpayments.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
 <div id="element"></div>
-<script>
-    document.addEventListener("DOMContentLoaded", (e) => {
-        var blocksApp = new cp.PaymentBlocks({
-            publicId: "pk_4ac90c8b4be575f70f324288f093d",
-            description: "Тестовая оплата",
-            amount: 100,
-            currency: "RUB",
-            invoiceId: "123",
-            accountId: "123",
-            email: "",
-            requireEmail: false,
-            language: "ru-RU",
-            applePaySupport: false,
-            googlePaySupport: false,
-            yandexPaySupport: true,
-        }, {
-            appearance: {
-                colors: {
-                    primaryButtonColor: "#2E71FC",
-                    activeInputColor: "#0B1E46",
-                    inputBackground: "#FFFFFF",
-                    inputColor: "#8C949F",
-                    inputBorderColor: "#E2E8EF",
-                    errorColor: "#EB5757"
-                },
-                borders: {
-                    radius: "12px"
-                }
-            },
-            components: {
-                paymentButton: {
-                    text: "Оплатить",
-                    fontSize: "16px"
-                },
-                paymentForm: {
-                    labelFontSize: "16px",
-                    activeLabelFontSize: "12px",
-                    fontSize: "16px"
-                }
-            }
-        });
-        blocksApp.mount(document.getElementById("element"));
 
-        blocksApp.on("destroy", () => {
-            console.log("destroy");
-        });
-        blocksApp.on("success", (result) => {
-            console.log("success", result);
-        });
-        blocksApp.on("fail", (result) => {
-            console.log("fail", result);
-        });
-    })
-
-</script>
+<script src="{% static 'js/payment.js' %}"></script>
 </body>
 </html>
