@@ -41,11 +41,12 @@ INSTALLED_APPS = [
     # 3rd party apps
     'django_celery_beat',
     'debug_toolbar',
-    'shop.apps.ShopConfig',
     'dbsettings',
 
     # local apps
     'users.apps.UsersConfig',
+    'shop.apps.ShopConfig',
+    'cloudpayments_django_app.apps.CloudpaymentsDjangoAppConfig',
 ]
 
 MIDDLEWARE = [
