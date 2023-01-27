@@ -1,6 +1,4 @@
-"""
-    Telegram event handlers
-"""
+
 from telegram.ext import (
     Dispatcher, Filters,
     CommandHandler, MessageHandler,
@@ -10,7 +8,6 @@ from telegram.ext import (
 from dtb.settings import DEBUG
 from tgbot.handlers.broadcast_message.manage_data import CONFIRM_DECLINE_BROADCAST
 from tgbot.handlers.broadcast_message.static_text import broadcast_command
-from tgbot.handlers.onboarding.manage_data import SECRET_LEVEL_BUTTON
 
 from tgbot.handlers.utils import files, error
 from tgbot.handlers.admin import handlers as admin_handlers

@@ -1,7 +1,4 @@
-import datetime
-
-from django.utils import timezone
-from telegram import ParseMode, Update
+from telegram import Update
 from telegram.ext import CallbackContext
 
 from tgbot.handlers.utils.info import extract_user_data_from_update
@@ -40,7 +37,7 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
     # get random server for now
     server = VPNServer.objects.filter(is_active=True).order_by('?').first()
     if server is None:
-        update.callback_query.edit_message_text(text=shop_static_text.no_available_servers)
+        update.callback_query.edit_message_text(text=shop_text.no_available_servers)
         # TODO: send message to support
         return
 
@@ -50,7 +47,7 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
         # TODO: send message to support
         # TODO in future: add server to blacklist
         # TODO in future: try to connect to another server
-        update.callback_query.edit_message_text(text=shop_static_text.server_error)
+        update.callback_query.edit_message_text(text=shop_text.server_error)
         return
 
     new_profile = VPNProfile.objects.create(server=server, user=user)

@@ -18,10 +18,6 @@ def process_telegram_event(update_json):
     dispatcher.process_update(update)
 
 
-def index(request):
-    return JsonResponse({"error": "sup hacker"})
-
-
 class TelegramBotWebhookView(View):
     # WARNING: if fail - Telegram webhook will be delivered again.
     # Can be fixed with async celery task execution
