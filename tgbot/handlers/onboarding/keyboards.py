@@ -1,4 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
+from dtb.settings import MAIN_URL
 
 
 def choose_device() -> InlineKeyboardMarkup:
@@ -30,7 +31,7 @@ def main_menu() -> InlineKeyboardMarkup:
         InlineKeyboardButton("💻 Мои устройства", callback_data=f'main_menu:devices'),
         InlineKeyboardButton("👥 Пригласить друга", callback_data=f'main_menu:invoke_friend'),
     ],
-        [InlineKeyboardButton("💳 Оплатить", web_app=WebAppInfo(url='https://vpnbottest.cupsoft.ru/pay/'))],
+        [InlineKeyboardButton("💳 Оплатить", web_app=WebAppInfo(url=f'{MAIN_URL}/pay/'))],
         [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'main_menu:support')],
     ]
 

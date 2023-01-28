@@ -62,7 +62,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*']
+MAIN_URL = os.getenv("URL", "http://localhost:8000")
+CSRF_TRUSTED_ORIGINS = [MAIN_URL]
 
 INTERNAL_IPS = [
     # ...
