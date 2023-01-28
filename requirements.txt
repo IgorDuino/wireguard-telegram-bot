@@ -10,7 +10,6 @@ django-cors-headers
 django-debug-toolbar==3.8.1
 whitenoise==6.3.0
 django-dbsettings # for storing settings in database
-django-admin-interface
 
 # Django 3.0 async requirements
 gunicorn==20.1.0

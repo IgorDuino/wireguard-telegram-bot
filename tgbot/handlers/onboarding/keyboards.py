@@ -1,7 +1,7 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 
 
-def start_menu() -> InlineKeyboardMarkup:
+def choose_device() -> InlineKeyboardMarkup:
     buttons = [[
         InlineKeyboardButton("📱 Android", callback_data=f'choose_device:android'),
         InlineKeyboardButton("🍎 iOS", callback_data=f'choose_device:ios'),

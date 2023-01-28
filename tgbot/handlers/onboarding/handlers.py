@@ -3,7 +3,7 @@ from telegram.ext import CallbackContext
 
 from tgbot.handlers.utils.info import extract_user_data_from_update
 from users.models import User
-from tgbot.handlers.onboarding.keyboards import start_menu, choose_device_pc, main_menu
+from tgbot.handlers.onboarding.keyboards import choose_device, choose_device_pc, main_menu
 
 from shop import text as shop_text
 from shop.utils import wireguard_client
@@ -18,8 +18,13 @@ def command_start(update: Update, context: CallbackContext) -> None:
 
     text = shop_text.start_text(u.first_name, created)
 
+    if created:
+        keyboard = choose_device()
+    else:
+        keyboard = main_menu()
+
     update.message.reply_text(text=text,
-                              reply_markup=start_menu())
+                              reply_markup=keyboard)
 
 
 def choose_device_handler(update: Update, context: CallbackContext) -> None:
