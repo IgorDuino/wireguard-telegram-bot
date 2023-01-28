@@ -25,7 +25,6 @@ def setup_dispatcher(dp):
     # admin commands
     dp.add_handler(CommandHandler("admin", admin_handlers.admin))
     dp.add_handler(CommandHandler("stats", admin_handlers.stats))
-    dp.add_handler(CommandHandler('export_users', admin_handlers.export_users))
 
     # keyboard handlers
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.choose_device_handler,
