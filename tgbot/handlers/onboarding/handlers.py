@@ -1,4 +1,4 @@
-from telegram import Update
+from telegram import Update, ReplyKeyboardRemove
 from telegram.ext import CallbackContext
 
 from tgbot.handlers.utils.info import extract_user_data_from_update
@@ -30,6 +30,15 @@ def command_start(update: Update, context: CallbackContext) -> None:
 
     update.message.reply_text(text=text,
                               reply_markup=keyboard)
+
+
+def command_clear(update: Update, context: CallbackContext) -> None:
+    msg = update.message.reply_text(text='Clearing keyboard',
+                                    reply_markup=ReplyKeyboardRemove())
+    context.bot.delete_message(chat_id=update.message.chat_id, message_id=msg.message_id)
+    context.bot.send_message(chat_id=update.message.chat_id, text='Главное меню',
+                             reply_markup=main_menu(user_id=update.message.chat_id,
+                                                    bot_link=f"https://t.me/{context.bot.username}"))
 
 
 def choose_device_handler(update: Update, context: CallbackContext) -> None:
