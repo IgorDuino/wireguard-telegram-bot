@@ -46,7 +46,7 @@ const data = { //содержимое элемента data
 };
 
 payments.pay("charge", { // options
-    publicId: public_id,
+    publicId: publicId,
     accountId: 'user@example.com',
     description: 'Оплата товаров в example.com',
     amount: 123000,
