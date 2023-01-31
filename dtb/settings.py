@@ -65,6 +65,7 @@ MIDDLEWARE = [
 
 MAIN_URL = os.getenv("URL", "http://localhost:8000")
 PAYMENT_URL = os.getenv("PAYMENT_URL", "https://core.croc-vpn.com/pay")
+ROOT_ADMIN_ID = os.getenv("ROOT_ADMIN_ID")
 
 CSRF_TRUSTED_ORIGINS = [MAIN_URL]
 
