@@ -64,6 +64,8 @@ MIDDLEWARE = [
 ]
 
 MAIN_URL = os.getenv("URL", "http://localhost:8000")
+PAYMENT_URL = os.getenv("PAYMENT_URL", "https://core.croc-vpn.com/pay")
+
 CSRF_TRUSTED_ORIGINS = [MAIN_URL]
 
 INTERNAL_IPS = [
@@ -163,9 +165,9 @@ CLOUDPAYMENTS_PUBLIC_KEY = os.getenv("CLOUDPAYMENTS_PUBLIC_KEY")
 CLOUDPAYMENTS_PRIVATE_KEY = os.getenv("CLOUDPAYMENTS_PRIVATE_KEY")
 GARPIX_PAYMENT_STATUS_CHANGED_CALLBACK = 'cloudpayments_django_app.views.payment_status_changed_callback'
 
-MIGRATION_MODULES = {
-    'garpix_cloudpayments': 'app.migrations.garpix_cloudpayments'
-}
+# MIGRATION_MODULES = {
+#     'garpix_cloudpayments': 'app.migrations.garpix_cloudpayments'
+# }
 
 # -----> SENTRY
 # import sentry_sdk

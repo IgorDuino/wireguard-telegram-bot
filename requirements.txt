@@ -35,4 +35,5 @@ pydantic
 cloudpayments
 garpix_cloudpayments
 
+pillow
 qrcode

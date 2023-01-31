@@ -1,8 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
-from dtb.settings import MAIN_URL
-# from run_polling import bot_info, bot_link
-bot_info = None
-bot_link = None
+from dtb.settings import PAYMENT_URL
 
 
 def choose_device() -> InlineKeyboardMarkup:
@@ -29,12 +26,12 @@ def choose_device_pc() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(buttons)
 
 
-def main_menu(user_id) -> InlineKeyboardMarkup:
+def main_menu(user_id, bot_link) -> InlineKeyboardMarkup:
     buttons = [[
         InlineKeyboardButton("💻 Мои устройства", callback_data=f'my_devices'),
         InlineKeyboardButton("👥 Пригласить друга", url=f'{bot_link}?start={user_id}'),
     ],
-        [InlineKeyboardButton("💳 Оплатить", web_app=WebAppInfo(url=f'{MAIN_URL}/pay/'))],
+        [InlineKeyboardButton("💳 Оплатить", web_app=WebAppInfo(url=PAYMENT_URL))],
         [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'main_menu:support')],
     ]
 

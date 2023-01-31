@@ -15,13 +15,18 @@ import string
 
 def command_start(update: Update, context: CallbackContext) -> None:
     u, created = User.get_user_and_created(update, context)
+    start_code = update.message.text.split(' ')[1] if len(update.message.text.split(' ')) > 1 else None
 
     text = shop_text.start_text(u.first_name, created)
 
+    bot_link = f"https://t.me/{context.bot.username}"
     if created:
+        if start_code:
+            u.deep_link = start_code
+            u.save()
         keyboard = choose_device()
     else:
-        keyboard = main_menu()
+        keyboard = main_menu(user_id=u.user_id, bot_link=bot_link)
 
     update.message.reply_text(text=text,
                               reply_markup=keyboard)
@@ -37,9 +42,8 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
         update.callback_query.edit_message_reply_markup(reply_markup=choose_device_pc())
         return
 
-    # TODO: select server to connect user
     # TODO in future: prefer to connect to the same server as user was connected before
-    # get random server for now
+
     server = VPNServer.objects.filter(is_active=True).order_by('?').first()
     if server is None:
         update.callback_query.edit_message_text(text=shop_text.no_available_servers)
@@ -59,7 +63,6 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
 
     name = f"{server.city}_{''.join(random.choice(string.ascii_lowercase) for _ in range(10))}{str(new_profile.id)}"
     server_profile = wg.create_profile(name)
-    print(server_profile)
 
     new_profile.name = name
     new_profile.ip = server_profile['address']
@@ -69,6 +72,7 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
     config = wg.get_client_configuration(server_profile['id'])
     qr_code = wg.get_client_qr_code(server_profile['id'])
 
+    bot_link = f"https://t.me/{context.bot.username}"
     context.bot.delete_message(
         chat_id=user_id,
         message_id=update.callback_query.message.message_id
@@ -86,5 +90,5 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
     context.bot.send_message(
         chat_id=user_id,
         text=shop_text.after_device_text(device),
-        reply_markup=main_menu()
+        reply_markup=main_menu(user_id=user_id, bot_link=bot_link)
     )
