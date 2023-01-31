@@ -1,6 +1,8 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from dtb.settings import MAIN_URL
-from run_polling import bot_info, bot_link
+# from run_polling import bot_info, bot_link
+bot_info = None
+bot_link = None
 
 
 def choose_device() -> InlineKeyboardMarkup:

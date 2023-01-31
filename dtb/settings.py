@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'debug_toolbar',
     'dbsettings',
+    'garpix_cloudpayments',
 
     # local apps
     'users.apps.UsersConfig',
@@ -158,6 +159,13 @@ if TELEGRAM_TOKEN is None:
     sys.exit(1)
 
 TELEGRAM_LOGS_CHAT_ID = os.getenv("TELEGRAM_LOGS_CHAT_ID", default=None)
+CLOUDPAYMENTS_PUBLIC_KEY = os.getenv("CLOUDPAYMENTS_PUBLIC_KEY")
+CLOUDPAYMENTS_PRIVATE_KEY = os.getenv("CLOUDPAYMENTS_PRIVATE_KEY")
+GARPIX_PAYMENT_STATUS_CHANGED_CALLBACK = 'cloudpayments_django_app.views.payment_status_changed_callback'
+
+MIGRATION_MODULES = {
+    'garpix_cloudpayments': 'app.migrations.garpix_cloudpayments'
+}
 
 # -----> SENTRY
 # import sentry_sdk
