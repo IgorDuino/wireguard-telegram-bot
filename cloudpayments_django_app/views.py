@@ -1,11 +1,11 @@
 from django.shortcuts import render
-from dtb.settings import CLOUDPAYMENTS_PUBLIC_KEY
+from dtb.settings import CLOUDPAYMENTS_PUBLIC_ID, SUBSCRIPTION_PRICE
 from garpix_cloudpayments.models.choices import PAYMENT_STATUS_COMPLETED, PAYMENT_STATUS_CANCELLED, \
     PAYMENT_STATUS_DECLINED
 
 
 def index(request):
-    return render(request, 'pay.html', {"public_key": CLOUDPAYMENTS_PUBLIC_KEY})
+    return render(request, 'pay.html', {"public_id": CLOUDPAYMENTS_PUBLIC_ID, "subscription_price": SUBSCRIPTION_PRICE})
 
 
 def payment_status_changed_callback(payment):
