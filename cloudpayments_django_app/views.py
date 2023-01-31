@@ -1,20 +1,33 @@
-from django.shortcuts import render
-from dtb.settings import CLOUDPAYMENTS_PUBLIC_ID, SUBSCRIPTION_PRICE
-from garpix_cloudpayments.models.choices import PAYMENT_STATUS_COMPLETED, PAYMENT_STATUS_CANCELLED, \
-    PAYMENT_STATUS_DECLINED
+from django.shortcuts import render, HttpResponse
+from dtb.settings import CLOUDPAYMENTS_PUBLIC_ID, CLOUDPAYMENTS_PRIVATE_KEY, SUBSCRIPTION_PRICE
 from tgbot.main import bot
 from dtb.settings import ROOT_ADMIN_ID
+import hashlib
+import hmac
+import base64
 
 
 def index(request):
-    return render(request, 'pay.html', {"public_id": CLOUDPAYMENTS_PUBLIC_ID, "subscription_price": SUBSCRIPTION_PRICE})
+    uid = request.GET.get('uid')
+    if not uid:
+        return HttpResponse('uid is required')
+    return render(request, 'pay.html', {"public_id": CLOUDPAYMENTS_PUBLIC_ID,
+                                        "subscription_price": SUBSCRIPTION_PRICE,
+                                        "uid": uid})
 
 
-def payment_status_changed_callback(payment):
-    bot.send_message(chat_id=ROOT_ADMIN_ID, text=f'Статус платежа: {payment.status}')
-    if payment.status == PAYMENT_STATUS_COMPLETED:
-        print('Меняем статус заказа на успешный')
-    elif payment.status in (PAYMENT_STATUS_CANCELLED, PAYMENT_STATUS_DECLINED):
-        print('Заказ провален')
+def check(request):
+    # X-Content-HMAC
+
+    message = request.body
+    secret = bytes(CLOUDPAYMENTS_PRIVATE_KEY, 'utf-8')
+
+    signature = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
+    print(signature)
+    print(request.headers.get('X-Content-Hmac'))
+    if signature == request.headers.get('X-Content-Hmac'):
+        print('OK')
+        bot.send_message(ROOT_ADMIN_ID, 'OK')
     else:
-        print('Можем тоже использовать')
+        print('FAIL')
+        bot.send_message(ROOT_ADMIN_ID, 'FAIL')

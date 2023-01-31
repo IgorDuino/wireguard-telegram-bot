@@ -1,8 +1,7 @@
-from django.urls import path, include
+from django.urls import path
 
 from . import views
 
 urlpatterns = [
-    path('', views.index, name="index"),
-    path('cloudpayments/', include('garpix_cloudpayments.urls')),
+    path('check', views.check),
 ]

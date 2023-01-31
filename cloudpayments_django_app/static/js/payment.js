@@ -1,9 +1,9 @@
 const payments = new cp.CloudPayments({
-    yandexPaySupport: false,
+    yandexPaySupport: true,
     applePaySupport: false,
     googlePaySupport: false,
     masterPassSupport: false,
-    tinkoffInstallmentSupport: false
+    tinkoffInstallmentSupport: false,
 });
 
 payments.oncomplete = (result) => {
@@ -11,27 +11,19 @@ payments.oncomplete = (result) => {
 }
 
 
-const data = {
-    CloudPayments: {
-        recurrent: {
-            interval: 'Month',
-            period: 1,
-        }
-    }
-};
-
-
-payments.pay("charge", { // options
+payments.pay("charge", {
     publicId: publicId,
-    accountId: 'user@example.com',
-    description: 'Подписка CrocVPN',
+    description: 'Подписка CrocVPN 1 месяц',
     amount: subscriptionPrice,
     currency: 'RUB',
     skin: 'modern',
-    invoiceId: 1234567,
-    data: data
-}).then((result) => {
-    // Объект типа WidgetResult
-    console.log('result', result);
+    invoiceId: uid,
+    data: {
+        CloudPayments: {
+            recurrent: {
+                interval: 'Month',
+                period: 1,
+            }
+        }
+    }
 });
-

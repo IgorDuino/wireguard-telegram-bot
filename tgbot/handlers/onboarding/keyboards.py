@@ -31,7 +31,7 @@ def main_menu(user_id, bot_link) -> InlineKeyboardMarkup:
         InlineKeyboardButton("💻 Мои устройства", callback_data=f'my_devices'),
         InlineKeyboardButton("👥 Пригласить друга", url=f'{bot_link}?start={user_id}'),
     ],
-        [InlineKeyboardButton("💳 Оплатить", web_app=WebAppInfo(url=PAYMENT_URL))],
+        [InlineKeyboardButton("💳 Оплатить", web_app=WebAppInfo(url=f"{PAYMENT_URL}?uid={user_id}"))],
         [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'main_menu:support')],
     ]
 
