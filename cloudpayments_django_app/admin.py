@@ -1,3 +1,4 @@
 from django.contrib import admin
+from cloudpayments_django_app.models import Replenishment
 
-# Register your models here.
+admin.register(Replenishment)
