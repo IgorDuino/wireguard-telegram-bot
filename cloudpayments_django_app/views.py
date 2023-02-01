@@ -24,9 +24,9 @@ def check(request):
     secret = bytes(str(CLOUDPAYMENTS_PRIVATE_KEY), 'utf-8')
 
     signature = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
-    print(request.body)
+
     print(signature)
-    print(request.headers.get('X-Content-Hmac'))
+    print(request.headers.get('Content-HMAC'))
     if signature == request.headers.get('X-Content-Hmac'):
         print('OK')
         bot.send_message(ROOT_ADMIN_ID, 'OK')
