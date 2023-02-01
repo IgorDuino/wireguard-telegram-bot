@@ -66,7 +66,7 @@ def check(request):
             payment_method=data.get("PaymentMethod"),
             is_test=data["IsTest"]
         )
-
+        print("ok")
         return HttpResponse({"code": 0}, content_type='application/json')
 
     except:
