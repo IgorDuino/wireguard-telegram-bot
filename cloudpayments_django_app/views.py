@@ -20,7 +20,7 @@ def check(request):
     # X-Content-HMAC
 
     message = request.body
-    secret = bytes(CLOUDPAYMENTS_PRIVATE_KEY, 'utf-8')
+    secret = bytes(str(CLOUDPAYMENTS_PRIVATE_KEY), 'utf-8')
 
     signature = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
     print(signature)
