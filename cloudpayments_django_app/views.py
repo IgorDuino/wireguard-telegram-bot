@@ -5,7 +5,7 @@ import hashlib
 import hmac
 import base64
 
-CLOUDPAYMENTS_IPS = ["91.142.84.0/27", "87.251.91.160/27", " 185.98.81.0/28"]
+CLOUDPAYMENTS_IPS = ["91.142.84.0/27", "87.251.91.160/27", "185.98.81.0/28"]
 
 
 def index(request):
