@@ -33,12 +33,20 @@ def command_start(update: Update, context: CallbackContext) -> None:
 
 
 def command_clear(update: Update, context: CallbackContext) -> None:
+    user = User.get_user(update, context)
+    # get all vpn profiles of user
+    profiles = VPNProfile.objects.filter(user=user)
+    profile_id = None
+    if len(profiles) == 1:
+        profile_id = profiles[0].id_on_server
+
     msg = update.message.reply_text(text='Clearing keyboard',
                                     reply_markup=ReplyKeyboardRemove())
     context.bot.delete_message(chat_id=update.message.chat_id, message_id=msg.message_id)
     context.bot.send_message(chat_id=update.message.chat_id, text='Главное меню',
                              reply_markup=main_menu(user_id=update.message.chat_id,
-                                                    bot_link=f"https://t.me/{context.bot.username}"))
+                                                    bot_link=f"https://t.me/{context.bot.username}",
+                                                    payment_id=profile_id))
 
 
 def choose_device_handler(update: Update, context: CallbackContext) -> None:

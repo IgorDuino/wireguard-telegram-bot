@@ -26,12 +26,22 @@ def choose_device_pc() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(buttons)
 
 
-def main_menu(user_id, bot_link) -> InlineKeyboardMarkup:
+def main_menu(user_id, bot_link, payment_id) -> InlineKeyboardMarkup:
+    if payment_id:
+        buttons = [[
+            InlineKeyboardButton("💻 Мои устройства", callback_data=f'my_devices'),
+            InlineKeyboardButton("👥 Пригласить друга", url=f'{bot_link}?start={user_id}'),
+        ],
+            [InlineKeyboardButton("💳 Оплатить", web_app=WebAppInfo(url=f"{PAYMENT_URL}?uid={payment_id}"))],
+            [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'main_menu:support')],
+        ]
+
+        return InlineKeyboardMarkup(buttons)
     buttons = [[
         InlineKeyboardButton("💻 Мои устройства", callback_data=f'my_devices'),
         InlineKeyboardButton("👥 Пригласить друга", url=f'{bot_link}?start={user_id}'),
     ],
-        [InlineKeyboardButton("💳 Оплатить", web_app=WebAppInfo(url=f"{PAYMENT_URL}?uid={user_id}"))],
+        [InlineKeyboardButton("💳 Оплатить", callback_data=f'main_menu:choose_profile_to_pay')],
         [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'main_menu:support')],
     ]
 
