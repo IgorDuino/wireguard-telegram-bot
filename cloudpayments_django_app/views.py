@@ -29,6 +29,8 @@ def check(request):
 
     print(signature)
     print(request.headers.get('Content-HMAC'))
+    print(request.headers.get('X-Content-Hmac'))
+
     if signature == request.headers.get('X-Content-Hmac'):
         print('OK')
         bot.send_message(ROOT_ADMIN_ID, 'OK')
