@@ -1,11 +1,11 @@
 from django.shortcuts import render, HttpResponse
 from dtb.settings import CLOUDPAYMENTS_PUBLIC_ID, CLOUDPAYMENTS_SECRET_KEY, SUBSCRIPTION_PRICE
-from tgbot.main import bot
-from dtb.settings import ROOT_ADMIN_ID
+import ipaddress
 import hashlib
 import hmac
 import base64
-import json
+
+CLOUDPAYMENTS_IPS = ["91.142.84.0/27", "87.251.91.160/27", " 185.98.81.0/28"]
 
 
 def index(request):
@@ -21,19 +21,18 @@ def check(request):
     if request.method != 'POST':
         return HttpResponse('Only POST allowed', status=405)
 
-    message = request.read()
-    print(message)
-    print(CLOUDPAYMENTS_SECRET_KEY)
-    secret = bytes(str(CLOUDPAYMENTS_SECRET_KEY), 'utf-8')
+    signature = base64.b64encode(
+        hmac.new(bytes(str(CLOUDPAYMENTS_SECRET_KEY), 'utf-8'), request.read(), digestmod=hashlib.sha256).digest())
 
-    signature = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
+    check_hmac = signature.decode('utf-8') == request.headers.get('Content-HMAC')
 
-    print(signature)
-    print(request.headers.get('Content-HMAC'))
+    check_ip = False
+    for ip in CLOUDPAYMENTS_IPS:
+        if ipaddress.ip_address(request.META['REMOTE_ADDR']) in ipaddress.ip_network(ip):
+            check_ip = True
+            break
 
-    if signature == request.headers.get('Content-HMAC'):
-        print('OK')
-        bot.send_message(ROOT_ADMIN_ID, 'OK')
-    else:
-        print('FAIL')
-        bot.send_message(ROOT_ADMIN_ID, 'FAIL')
+    if not (check_hmac and check_ip):
+        return HttpResponse('Forbidden', status=403)
+
+    return HttpResponse('OK')
