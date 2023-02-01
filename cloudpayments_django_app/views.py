@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse
-from dtb.settings import CLOUDPAYMENTS_PUBLIC_ID, CLOUDPAYMENTS_PRIVATE_KEY, SUBSCRIPTION_PRICE
+from dtb.settings import CLOUDPAYMENTS_PUBLIC_ID, CLOUDPAYMENTS_SECRET_KEY, SUBSCRIPTION_PRICE
 from tgbot.main import bot
 from dtb.settings import ROOT_ADMIN_ID
 import hashlib
@@ -23,8 +23,8 @@ def check(request):
 
     message = request.read()
     print(message)
-    print(CLOUDPAYMENTS_PRIVATE_KEY)
-    secret = bytes(str(CLOUDPAYMENTS_PRIVATE_KEY), 'utf-8')
+    print(CLOUDPAYMENTS_SECRET_KEY)
+    secret = bytes(str(CLOUDPAYMENTS_SECRET_KEY), 'utf-8')
 
     signature = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
 
