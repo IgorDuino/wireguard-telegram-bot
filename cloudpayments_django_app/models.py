@@ -11,13 +11,13 @@ class Replenishment(models.Model):
     card_exp_date = models.CharField(max_length=5)
     vpn_profile = models.ForeignKey('shop.VPNProfile', on_delete=models.SET_NULL, null=True)
     subscription_id = models.CharField(max_length=512, null=True)
-    ip_address = models.IPAddressField(null=True)
+    ip_address = models.GenericIPAddressField(null=True)
     payment_method = models.CharField(max_length=512, null=True)
     is_test = models.BooleanField()
     paid = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.amount} {self.user} {"TEST" if self.is_test else ""}'
+        return f'{self.amount} {self.vpn_profile} {"TEST" if self.is_test else ""}'
 
     class Meta:
         verbose_name = 'Replenishment'
