@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse
 from dtb.settings import CLOUDPAYMENTS_PUBLIC_ID, CLOUDPAYMENTS_SECRET_KEY, SUBSCRIPTION_PRICE
+from utils.ip import get_client_ip
 import ipaddress
 import hashlib
 import hmac
@@ -28,11 +29,12 @@ def check(request):
 
     check_ip = False
     for ip in CLOUDPAYMENTS_IPS:
-        if ipaddress.ip_address(request.META['REMOTE_ADDR']) in ipaddress.ip_network(ip):
+        if ipaddress.ip_address(get_client_ip(request)) in ipaddress.ip_network(ip):
             check_ip = True
             break
 
     if not (check_hmac and check_ip):
+        print(check_hmac, check_ip)
         return HttpResponse('Forbidden', status=403)
 
     return HttpResponse('OK')
