@@ -67,6 +67,8 @@ def check(request):
             is_test=data["IsTest"]
         )
 
+        return HttpResponse({"code": 0}, content_type='application/json')
+
     except:
         return HttpResponse({"code": 13}, content_type='application/json')
 
