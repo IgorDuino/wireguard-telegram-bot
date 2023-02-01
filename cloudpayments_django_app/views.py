@@ -21,9 +21,8 @@ def check(request):
     if request.method != 'POST':
         return HttpResponse('Only POST allowed', status=405)
 
-    body_unicode = request.body.decode('utf-8')
-    body_data = json.loads(body_unicode)
-    message = bytes(str(body_data), 'utf-8')
+    message = request.read()
+    print(message)
     secret = bytes(str(CLOUDPAYMENTS_PRIVATE_KEY), 'utf-8')
 
     signature = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
