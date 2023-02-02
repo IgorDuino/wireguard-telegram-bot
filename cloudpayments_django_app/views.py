@@ -20,6 +20,8 @@ def check_signature(request):
 
     check_hmac = signature.decode('utf-8') == request.headers.get('Content-HMAC')
 
+    print(signature.decode('utf-8'), request.headers.get('Content-HMAC'))
+
     check_ip = False
     for ip in CLOUDPAYMENTS_IPS:
         if ipaddress.ip_address(get_client_ip(request)) in ipaddress.ip_network(ip):
