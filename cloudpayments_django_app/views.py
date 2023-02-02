@@ -74,7 +74,7 @@ def check(request):
         return HttpResponse({"code": 0}, content_type='application/json')
 
     except Exception as e:
-        logging.error(f'Error in check: {e}')
+        logging.error(f'Error in check: {e} {data}')
         return HttpResponse({"code": 13}, content_type='application/json')
 
 
