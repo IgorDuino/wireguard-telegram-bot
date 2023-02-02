@@ -10,7 +10,6 @@ import base64
 from datetime import datetime, timedelta
 import logging
 
-print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 CLOUDPAYMENTS_IPS = ["91.142.84.0/27", "87.251.91.160/27", "185.98.81.0/28"]
 
 
@@ -74,7 +73,8 @@ def check(request):
         logging.info(f'New replenishment: {data["TransactionId"]}')
         return HttpResponse({"code": 0}, content_type='application/json')
 
-    except:
+    except Exception as e:
+        logging.error(f'Error in check: {e}')
         return HttpResponse({"code": 13}, content_type='application/json')
 
 
