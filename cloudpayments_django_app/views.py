@@ -8,6 +8,7 @@ import hashlib
 import hmac
 import base64
 from datetime import datetime, timedelta
+import logging
 
 CLOUDPAYMENTS_IPS = ["91.142.84.0/27", "87.251.91.160/27", "185.98.81.0/28"]
 
@@ -43,13 +44,16 @@ def check(request):
     data = request.POST.dict()
     try:
         if Replenishment.objects.filter(transaction_id=data['TransactionId']).exists():
+            logging.info(f'Replenishment already exists: {data["TransactionId"]}')
             return HttpResponse({"code": 10}, content_type='application/json')
 
         if not VPNProfile.objects.filter(id_on_server=data['AccountId']).exists():
+            logging.info(f'VPNProfile not found: {data["AccountId"]}')
             return HttpResponse({"code": 11}, content_type='application/json')
 
-        if (int(data["Amount"]) not in [SUBSCRIPTION_PRICE, SUBSCRIPTION_PRICE * 2, SUBSCRIPTION_PRICE * 6]) \
+        if (int(data["Amount"]) not in [SUBSCRIPTION_PRICE, SUBSCRIPTION_PRICE * 3, SUBSCRIPTION_PRICE * 6]) \
                 or data["Currency"] != "RUB":
+            logging.info(f'Wrong amount or currency: {data["Amount"]} {data["Currency"]}')
             return HttpResponse({"code": 12}, content_type='application/json')
 
         Replenishment.objects.create(
@@ -66,7 +70,7 @@ def check(request):
             payment_method=data.get("PaymentMethod"),
             is_test=data["IsTest"]
         )
-        print("ok")
+        logging.info(f'New replenishment: {data["TransactionId"]}')
         return HttpResponse({"code": 0}, content_type='application/json')
 
     except:
