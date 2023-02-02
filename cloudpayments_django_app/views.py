@@ -16,7 +16,7 @@ CLOUDPAYMENTS_IPS = ["91.142.84.0/27", "87.251.91.160/27", "185.98.81.0/28"]
 def check_signature(request):
     print(request.read())
     signature = base64.b64encode(
-        hmac.new(bytes(str(CLOUDPAYMENTS_SECRET_KEY), 'utf-8'), request.read(), digestmod=hashlib.sha256).digest())
+        hmac.new(CLOUDPAYMENTS_SECRET_KEY.encode(), request.read(), digestmod=hashlib.sha256).digest())
 
     check_hmac = signature.decode('utf-8') == request.headers.get('Content-HMAC')
 
