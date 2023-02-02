@@ -10,6 +10,7 @@ import base64
 from datetime import datetime, timedelta
 import logging
 
+print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 CLOUDPAYMENTS_IPS = ["91.142.84.0/27", "87.251.91.160/27", "185.98.81.0/28"]
 
 
