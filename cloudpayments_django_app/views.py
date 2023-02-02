@@ -42,6 +42,8 @@ def check(request):
         return HttpResponse('Forbidden', status=403)
 
     data = request.POST.dict()
+    print(data)
+    print(request.read())
     try:
         if Replenishment.objects.filter(transaction_id=data['TransactionId']).exists():
             logging.info(f'Replenishment already exists: {data["TransactionId"]}')
