@@ -14,19 +14,19 @@ import string
 
 
 def command_start(update: Update, context: CallbackContext) -> None:
-    u, created = User.get_user_and_created(update, context)
+    user, created = User.get_user_and_created(update, context)
     start_code = update.message.text.split(' ')[1] if len(update.message.text.split(' ')) > 1 else None
 
-    text = shop_text.start_text(u.first_name, created)
+    text = shop_text.start_text(user.first_name, created)
 
     bot_link = f"https://t.me/{context.bot.username}"
     if created:
         if start_code:
-            u.deep_link = start_code
-            u.save()
+            user.deep_link = start_code
+            user.save()
         keyboard = choose_device()
     else:
-        keyboard = main_menu(user_id=u.user_id, bot_link=bot_link)
+        keyboard = main_menu(bot_link=bot_link, user=user)
 
     update.message.reply_text(text=text,
                               reply_markup=keyboard)
@@ -34,19 +34,13 @@ def command_start(update: Update, context: CallbackContext) -> None:
 
 def command_clear(update: Update, context: CallbackContext) -> None:
     user = User.get_user(update, context)
-    # get all vpn profiles of user
-    profiles = VPNProfile.objects.filter(user=user)
-    profile_id = None
-    if len(profiles) == 1:
-        profile_id = profiles[0].id_on_server
 
     msg = update.message.reply_text(text='Clearing keyboard',
                                     reply_markup=ReplyKeyboardRemove())
     context.bot.delete_message(chat_id=update.message.chat_id, message_id=msg.message_id)
     context.bot.send_message(chat_id=update.message.chat_id, text='Главное меню',
-                             reply_markup=main_menu(user_id=update.message.chat_id,
-                                                    bot_link=f"https://t.me/{context.bot.username}",
-                                                    payment_id=profile_id))
+                             reply_markup=main_menu(bot_link=f"https://t.me/{context.bot.username}",
+                                                    user=user))
 
 
 def choose_device_handler(update: Update, context: CallbackContext) -> None:
@@ -107,5 +101,5 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
     context.bot.send_message(
         chat_id=user_id,
         text=shop_text.after_device_text(device),
-        reply_markup=main_menu(user_id=user_id, bot_link=bot_link)
+        reply_markup=main_menu(bot_link=bot_link, user=user)
     )

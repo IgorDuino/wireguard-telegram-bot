@@ -1,5 +1,7 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from dtb.settings import PAYMENT_URL
+from shop.models import VPNProfile
+from users.models import User
 
 
 def choose_device() -> InlineKeyboardMarkup:
@@ -26,7 +28,12 @@ def choose_device_pc() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(buttons)
 
 
-def main_menu(user_id, bot_link, payment_id) -> InlineKeyboardMarkup:
+def main_menu(bot_link: str, user: User) -> InlineKeyboardMarkup:
+    user_id = user.user_id
+    profiles = VPNProfile.objects.filter(user=user)
+    payment_id = None
+    if len(profiles) == 1:
+        payment_id = profiles[0].id_on_server
     if payment_id:
         buttons = [[
             InlineKeyboardButton("💻 Мои устройства", callback_data=f'my_devices'),
