@@ -26,6 +26,8 @@ def check_signature(request):
             check_ip = True
             break
 
+    print(check_hmac, check_ip)
+
     return check_hmac and check_ip
 
 
