@@ -19,15 +19,11 @@ def check_signature(request):
 
     check_hmac = signature.decode('utf-8') == request.headers.get('Content-HMAC')
 
-    print(signature.decode('utf-8'), request.headers.get('Content-HMAC'))
-
     check_ip = False
     for ip in CLOUDPAYMENTS_IPS:
         if ipaddress.ip_address(get_client_ip(request)) in ipaddress.ip_network(ip):
             check_ip = True
             break
-
-    print(check_hmac, check_ip)
 
     return check_hmac and check_ip
 
@@ -42,11 +38,11 @@ def index(request):
 
 
 def check(request):
-    if not check_signature(request):
+    request_copy = request
+    if not check_signature(request_copy):
         return HttpResponse('Forbidden', status=403)
 
     data = request.POST.dict()
-    print(data)
     print(request.read())
     try:
         if Replenishment.objects.filter(transaction_id=data['TransactionId']).exists():
