@@ -1,4 +1,4 @@
-from django.http import HttpRequest
+from django.http import HttpRequest, QueryDict
 from django.shortcuts import render, HttpResponse
 from dtb.settings import CLOUDPAYMENTS_PUBLIC_ID, CLOUDPAYMENTS_SECRET_KEY, SUBSCRIPTION_PRICE
 from utils.ip import get_client_ip
@@ -10,7 +10,6 @@ import hmac
 import base64
 from datetime import datetime, timedelta
 import logging
-import json
 
 CLOUDPAYMENTS_IPS = ["91.142.84.0/27", "87.251.91.160/27", "185.98.81.0/28"]
 
@@ -40,7 +39,8 @@ def index(request: HttpRequest):
 
 
 def check(request: HttpRequest):
-    data = json.loads(request.body)
+    data = QueryDict(request.body)
+    print(data)
 
     if not check_signature(request):
         return HttpResponse('Forbidden', status=403)
@@ -82,10 +82,10 @@ def check(request: HttpRequest):
 
 
 def pay(request: HttpRequest):
+    data = QueryDict(request.body)
+
     if not check_signature(request):
         return HttpResponse('Forbidden', status=403)
-
-    data = json.loads(request.data)
 
     replenishment = Replenishment.objects.get(transaction_id=data['TransactionId'])
     if data["Status"] == "Completed":
