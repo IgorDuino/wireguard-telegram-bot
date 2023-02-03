@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 import logging
 
 CLOUDPAYMENTS_IPS = ["91.142.84.0/27", "87.251.91.160/27", "185.98.81.0/28"]
-logging.info(f'Cloudpayments IPs: {CLOUDPAYMENTS_IPS}')
+
 
 def check_signature(request: HttpRequest):
     signature = base64.b64encode(
@@ -49,16 +49,16 @@ def check(request: HttpRequest):
 
     try:
         if Replenishment.objects.filter(transaction_id=transaction_id).exists():
-            logging.info(f'Replenishment already exists: {transaction_id}')
+            logging.warning(f'Replenishment already exists: {transaction_id}')
             return HttpResponse({"code": 10}, content_type='application/json')
 
         if not VPNProfile.objects.filter(id_on_server=data['AccountId']).exists():
-            logging.info(f'VPNProfile not found: {data["AccountId"]}')
+            logging.warning(f'VPNProfile not found: {data["AccountId"]}')
             return HttpResponse({"code": 11}, content_type='application/json')
 
         if (amount not in [SUBSCRIPTION_PRICE, SUBSCRIPTION_PRICE * 3, SUBSCRIPTION_PRICE * 6]) \
                 or data["Currency"] != "RUB":
-            logging.info(f'Wrong amount or currency: {amount} {data["Currency"]}')
+            logging.warning(f'Wrong amount or currency: {amount} {data["Currency"]}')
             return HttpResponse({"code": 12}, content_type='application/json')
 
         Replenishment.objects.create(
@@ -75,7 +75,7 @@ def check(request: HttpRequest):
             payment_method=data.get("PaymentMethod"),
             is_test=data["IsTest"]
         )
-        logging.info(f'New replenishment: {transaction_id}')
+        logging.warning(f'New replenishment: {transaction_id}')
         return HttpResponse({"code": 0}, content_type='application/json')
 
     except Exception as e:
