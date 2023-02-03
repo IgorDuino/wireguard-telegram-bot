@@ -40,10 +40,10 @@ def index(request: HttpRequest):
 
 
 def check(request: HttpRequest):
+    data = json.loads(request.body)
+
     if not check_signature(request):
         return HttpResponse('Forbidden', status=403)
-
-    data = json.loads(request.body)
 
     try:
         if Replenishment.objects.filter(transaction_id=data['TransactionId']).exists():
@@ -85,7 +85,7 @@ def pay(request: HttpRequest):
     if not check_signature(request):
         return HttpResponse('Forbidden', status=403)
 
-    data = json.loads(request.body)
+    data = json.loads(request.data)
 
     replenishment = Replenishment.objects.get(transaction_id=data['TransactionId'])
     if data["Status"] == "Completed":
