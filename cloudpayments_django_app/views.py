@@ -1,3 +1,4 @@
+from django.http import HttpRequest
 from django.shortcuts import render, HttpResponse
 from dtb.settings import CLOUDPAYMENTS_PUBLIC_ID, CLOUDPAYMENTS_SECRET_KEY, SUBSCRIPTION_PRICE
 from utils.ip import get_client_ip
@@ -9,11 +10,12 @@ import hmac
 import base64
 from datetime import datetime, timedelta
 import logging
+import json
 
 CLOUDPAYMENTS_IPS = ["91.142.84.0/27", "87.251.91.160/27", "185.98.81.0/28"]
 
 
-def check_signature(request):
+def check_signature(request: HttpRequest):
     signature = base64.b64encode(
         hmac.new(CLOUDPAYMENTS_SECRET_KEY.encode('utf-8'), request.read(), digestmod=hashlib.sha256).digest())
 
@@ -21,14 +23,14 @@ def check_signature(request):
 
     check_ip = False
     for ip in CLOUDPAYMENTS_IPS:
-        if ipaddress.ip_address(get_client_ip(request)) in ipaddress.ip_network(ip):
+        if ipaddress.ip_address(get_client_ip(request)) in ipaddress.ip_network(ip, strict=False):
             check_ip = True
             break
 
     return check_hmac and check_ip
 
 
-def index(request):
+def index(request: HttpRequest):
     uid = request.GET.get('uid')
     if not uid:
         return HttpResponse('uid is required')
@@ -37,13 +39,12 @@ def index(request):
                                         "uid": uid})
 
 
-def check(request):
-    request_copy = request
-    if not check_signature(request_copy):
+def check(request: HttpRequest):
+    if not check_signature(request):
         return HttpResponse('Forbidden', status=403)
 
-    data = request.POST.dict()
-    print(request.read())
+    data = json.loads(request.body)
+
     try:
         if Replenishment.objects.filter(transaction_id=data['TransactionId']).exists():
             logging.info(f'Replenishment already exists: {data["TransactionId"]}')
@@ -80,11 +81,12 @@ def check(request):
         return HttpResponse({"code": 13}, content_type='application/json')
 
 
-def pay(request):
+def pay(request: HttpRequest):
     if not check_signature(request):
         return HttpResponse('Forbidden', status=403)
 
-    data = request.POST.dict()
+    data = json.loads(request.body)
+
     replenishment = Replenishment.objects.get(transaction_id=data['TransactionId'])
     if data["Status"] == "Completed":
         replenishment.paid = True
