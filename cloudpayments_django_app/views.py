@@ -41,7 +41,7 @@ def index(request: HttpRequest):
 # TODO: use django form instead of QueryDict
 def check(request: HttpRequest):
     data = QueryDict(request.body)
-    amount = int(data["Amount"])
+    amount = float(data["Amount"])
     transaction_id = data["TransactionId"]
 
     if not check_signature(request):
@@ -85,7 +85,7 @@ def check(request: HttpRequest):
 
 def pay(request: HttpRequest):
     data = QueryDict(request.body)
-    amount = int(data["Amount"])
+    amount = float(data["Amount"])
     transaction_id = data["TransactionId"]
 
     if not check_signature(request):
