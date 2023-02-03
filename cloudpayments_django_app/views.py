@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 import logging
 
 CLOUDPAYMENTS_IPS = ["91.142.84.0/27", "87.251.91.160/27", "185.98.81.0/28"]
-
+logging.info(f'Cloudpayments IPs: {CLOUDPAYMENTS_IPS}')
 
 def check_signature(request: HttpRequest):
     signature = base64.b64encode(
