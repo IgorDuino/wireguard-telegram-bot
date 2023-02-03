@@ -38,30 +38,32 @@ def index(request: HttpRequest):
                                         "uid": uid})
 
 
+# TODO: use django form instead of QueryDict
 def check(request: HttpRequest):
     data = QueryDict(request.body)
-    print(data)
+    amount = int(data["Amount"])
+    transaction_id = data["TransactionId"]
 
     if not check_signature(request):
         return HttpResponse('Forbidden', status=403)
 
     try:
-        if Replenishment.objects.filter(transaction_id=data['TransactionId']).exists():
-            logging.info(f'Replenishment already exists: {data["TransactionId"]}')
+        if Replenishment.objects.filter(transaction_id=transaction_id).exists():
+            logging.info(f'Replenishment already exists: {transaction_id}')
             return HttpResponse({"code": 10}, content_type='application/json')
 
         if not VPNProfile.objects.filter(id_on_server=data['AccountId']).exists():
             logging.info(f'VPNProfile not found: {data["AccountId"]}')
             return HttpResponse({"code": 11}, content_type='application/json')
 
-        if (int(data["Amount"]) not in [SUBSCRIPTION_PRICE, SUBSCRIPTION_PRICE * 3, SUBSCRIPTION_PRICE * 6]) \
+        if (amount not in [SUBSCRIPTION_PRICE, SUBSCRIPTION_PRICE * 3, SUBSCRIPTION_PRICE * 6]) \
                 or data["Currency"] != "RUB":
-            logging.info(f'Wrong amount or currency: {data["Amount"]} {data["Currency"]}')
+            logging.info(f'Wrong amount or currency: {amount} {data["Currency"]}')
             return HttpResponse({"code": 12}, content_type='application/json')
 
         Replenishment.objects.create(
-            amount=data["Amount"],
-            transaction_id=data["TransactionId"],
+            amount=amount,
+            transaction_id=transaction_id,
             date_time=datetime.strptime(data["DateTime"], "%Y-%m-%dT %H:%M:%S"),
             card_first_six=data["CardFirstSix"],
             card_last_four=data["CardLastFour"],
@@ -73,7 +75,7 @@ def check(request: HttpRequest):
             payment_method=data.get("PaymentMethod"),
             is_test=data["IsTest"]
         )
-        logging.info(f'New replenishment: {data["TransactionId"]}')
+        logging.info(f'New replenishment: {transaction_id}')
         return HttpResponse({"code": 0}, content_type='application/json')
 
     except Exception as e:
@@ -83,22 +85,24 @@ def check(request: HttpRequest):
 
 def pay(request: HttpRequest):
     data = QueryDict(request.body)
+    amount = int(data["Amount"])
+    transaction_id = data["TransactionId"]
 
     if not check_signature(request):
         return HttpResponse('Forbidden', status=403)
 
-    replenishment = Replenishment.objects.get(transaction_id=data['TransactionId'])
+    replenishment = Replenishment.objects.get(transaction_id=transaction_id)
     if data["Status"] == "Completed":
         replenishment.paid = True
         replenishment.save()
 
         vpn_profile = replenishment.vpn_profile
 
-        if int(data["Amount"]) == SUBSCRIPTION_PRICE:
+        if amount == SUBSCRIPTION_PRICE:
             vpn_profile.active_until += timedelta(days=30)
-        elif int(data["Amount"]) == SUBSCRIPTION_PRICE * 2:
-            vpn_profile.active_until += timedelta(days=30 * 2)
-        elif int(data["Amount"]) == SUBSCRIPTION_PRICE * 6:
+        elif amount == SUBSCRIPTION_PRICE * 3:
+            vpn_profile.active_until += timedelta(days=30 * 3)
+        elif amount == SUBSCRIPTION_PRICE * 6:
             vpn_profile.active_until += timedelta(days=30 * 6)
 
         return HttpResponse({"code": 0}, content_type='application/json')
