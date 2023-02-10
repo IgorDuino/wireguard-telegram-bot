@@ -95,3 +95,7 @@ my_devices_text = """
 choose_pay_period_text = """
 Выберите частоту подписки:
 """
+
+pay_text = """
+Оплата через CloudPayments:
+"""
