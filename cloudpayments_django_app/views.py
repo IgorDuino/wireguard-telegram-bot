@@ -1,4 +1,4 @@
-from django.http import HttpRequest, QueryDict
+from django.http import HttpRequest, QueryDict, JsonResponse
 from django.shortcuts import render, HttpResponse
 from dtb.settings import CLOUDPAYMENTS_PUBLIC_ID, CLOUDPAYMENTS_SECRET_KEY, SUBSCRIPTION_PRICE
 from utils.ip import get_client_ip
@@ -50,16 +50,16 @@ def check(request: HttpRequest):
     try:
         if Replenishment.objects.filter(transaction_id=transaction_id).exists():
             logging.warning(f'Replenishment already exists: {transaction_id}')
-            return HttpResponse({"code": 10}, content_type='application/json')
+            return JsonResponse({"code": 10})
 
         if not VPNProfile.objects.filter(id_on_server=data['AccountId']).exists():
             logging.warning(f'VPNProfile not found: {data["AccountId"]}')
-            return HttpResponse({"code": 11}, content_type='application/json')
+            return JsonResponse({"code": 11})
 
         if (amount not in [SUBSCRIPTION_PRICE, SUBSCRIPTION_PRICE * 3, SUBSCRIPTION_PRICE * 6]) \
                 or data["Currency"] != "RUB":
             logging.warning(f'Wrong amount or currency: {amount} {data["Currency"]}')
-            return HttpResponse({"code": 12}, content_type='application/json')
+            return JsonResponse({"code": 12})
 
         Replenishment.objects.create(
             amount=amount,
@@ -76,11 +76,11 @@ def check(request: HttpRequest):
             is_test=data["TestMode"]
         )
         logging.warning(f'New replenishment: {transaction_id}')
-        return HttpResponse({"code": 0}, content_type='application/json')
+        return JsonResponse({"code": 0})
 
     except Exception as e:
         logging.error(f'Error in check: {e} {data}')
-        return HttpResponse({"code": 13}, content_type='application/json')
+        return JsonResponse({"code": 13})
 
 
 def pay(request: HttpRequest):
@@ -105,4 +105,4 @@ def pay(request: HttpRequest):
         elif amount == SUBSCRIPTION_PRICE * 6:
             vpn_profile.active_until += timedelta(days=30 * 6)
 
-        return HttpResponse({"code": 0}, content_type='application/json')
+        return JsonResponse({"code": 0})
