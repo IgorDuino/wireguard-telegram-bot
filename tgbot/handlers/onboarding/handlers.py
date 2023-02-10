@@ -164,4 +164,4 @@ def pay_handler(update: Update, context: CallbackContext) -> None:
 
 
 def new_profile_handler(update: Update, context: CallbackContext) -> None:
-    update.callback_query.edit_message_text(shop_text.no_profiles, reply_markup=keyboards.choose_device())
+    update.callback_query.edit_message_text(shop_text.new_profile_text, reply_markup=keyboards.choose_device())
