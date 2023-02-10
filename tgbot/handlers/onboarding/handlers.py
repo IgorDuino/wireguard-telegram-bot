@@ -138,7 +138,7 @@ def main_menu_send(update: Update, context: CallbackContext) -> None:
 
 def choose_pay_period_handler(update: Update, context: CallbackContext) -> None:
     profile_server_id = update.callback_query.data.split(':')[1]
-    profile = VPNProfile.objects.filter(profile_server_id=profile_server_id).first()
+    profile = VPNProfile.objects.filter(id_on_server=profile_server_id).first()
 
     if profile:
         update.callback_query.edit_message_text(text=shop_text.choose_pay_period_text,
