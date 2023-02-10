@@ -1,14 +1,22 @@
 from django.http import HttpRequest, QueryDict, JsonResponse
 from django.shortcuts import render, HttpResponse
+
 from dtb.settings import CLOUDPAYMENTS_PUBLIC_ID, CLOUDPAYMENTS_SECRET_KEY, SUBSCRIPTION_PRICE
-from utils.ip import get_client_ip
+
 from cloudpayments_django_app.models import Replenishment
 from shop.models import VPNProfile
+
+from utils.ip import get_client_ip
 import ipaddress
 import hashlib
 import hmac
 import base64
+
 from datetime import datetime, timedelta
+
+from tgbot.main import bot
+from tgbot.handlers.onboarding.keyboards import main_menu
+
 import logging
 
 CLOUDPAYMENTS_IPS = ["91.142.84.0/27", "87.251.91.160/27", "185.98.81.0/28"]
