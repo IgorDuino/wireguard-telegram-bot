@@ -105,4 +105,12 @@ def pay(request: HttpRequest):
         elif amount == SUBSCRIPTION_PRICE * 6:
             vpn_profile.active_until += timedelta(days=30 * 6)
 
+        vpn_profile.save()
+
+        user = vpn_profile.user
+        bot.send_message(user.telegram_id,
+                         f'Оплата прошла успешно, профиль {vpn_profile.name} продлён до '
+                         f'{vpn_profile.active_until.strftime("%d.%m.%Y")}',
+                         reply_markup=main_menu(user))
+
         return JsonResponse({"code": 0})
