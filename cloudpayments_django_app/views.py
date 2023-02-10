@@ -40,7 +40,6 @@ def check_signature(request: HttpRequest):
 def index(request: HttpRequest):
     profile_server_id = request.GET.get('server_id')
     period = int(request.GET.get('period'))
-    logging.warning(profile_server_id, period, type(period))
 
     if not profile_server_id:
         return HttpResponse('Server id is required', status=400)
