@@ -29,8 +29,6 @@ else:
 ALLOWED_HOSTS = ["*", ]  # since Telegram uses a lot of IPs for webhooks
 
 INSTALLED_APPS = [
-    'admin_interface',
-    'colorfield',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -63,6 +61,12 @@ MIDDLEWARE = [
 
     'django.middleware.common.CommonMiddleware',
 ]
+
+MAIN_URL = os.getenv("URL", "http://localhost:8000")
+PAYMENT_URL = os.getenv("PAYMENT_URL", "https://core.croc-vpn.com/pay")
+ROOT_ADMIN_ID = os.getenv("ROOT_ADMIN_ID")
+
+CSRF_TRUSTED_ORIGINS = [MAIN_URL]
 
 INTERNAL_IPS = [
     # ...
@@ -157,6 +161,12 @@ if TELEGRAM_TOKEN is None:
     sys.exit(1)
 
 TELEGRAM_LOGS_CHAT_ID = os.getenv("TELEGRAM_LOGS_CHAT_ID", default=None)
+BOT_LINK = os.getenv("BOT_LINK")
+CLOUDPAYMENTS_PUBLIC_ID = os.getenv("CLOUDPAYMENTS_PUBLIC_ID")
+CLOUDPAYMENTS_SECRET_KEY = os.getenv("CLOUDPAYMENTS_SECRET_KEY")
+GARPIX_PAYMENT_STATUS_CHANGED_CALLBACK = 'cloudpayments_django_app.views.payment_status_changed_callback'
+SUBSCRIPTION_PRICE = 300
+TRIAL_PERIOD_DAYS = 3
 
 # -----> SENTRY
 # import sentry_sdk

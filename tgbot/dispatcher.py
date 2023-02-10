@@ -10,7 +10,6 @@ from tgbot.handlers.broadcast_message.static_text import broadcast_command
 
 from tgbot.handlers.utils import files, error
 from tgbot.handlers.admin import handlers as admin_handlers
-from tgbot.handlers.location import handlers as location_handlers
 from tgbot.handlers.onboarding import handlers as onboarding_handlers
 from tgbot.handlers.broadcast_message import handlers as broadcast_handlers
 from tgbot.main import bot
@@ -20,21 +19,29 @@ def setup_dispatcher(dp):
     """
     Adding handlers for events from Telegram
     """
-    # onboarding
+    # Usual commands
     dp.add_handler(CommandHandler("start", onboarding_handlers.command_start))
+    dp.add_handler(CommandHandler("clear", onboarding_handlers.command_clear))
 
-    # admin commands
+    # Admin commands
     dp.add_handler(CommandHandler("admin", admin_handlers.admin))
     dp.add_handler(CommandHandler("stats", admin_handlers.stats))
-    dp.add_handler(CommandHandler('export_users', admin_handlers.export_users))
 
-    # location
-    dp.add_handler(CommandHandler("ask_location", location_handlers.ask_for_location))
-    dp.add_handler(MessageHandler(Filters.location, location_handlers.location_handler))
-
-    # keyboard handlers
+    # Keyboard handlers
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.choose_device_handler,
                                         pattern=lambda x: x.startswith('choose_device:')))
+    dp.add_handler(CallbackQueryHandler(onboarding_handlers.new_profile_handler,
+                                        pattern='new_profile'))
+    dp.add_handler(CallbackQueryHandler(onboarding_handlers.profiles_handler,
+                                        pattern='profiles'))
+    dp.add_handler(CallbackQueryHandler(onboarding_handlers.main_menu_send, pattern='main_menu'))
+
+    dp.add_handler(CallbackQueryHandler(onboarding_handlers.choose_pay_period_handler,
+                                        pattern=lambda x: x.startswith('choose_pay_period:')))
+    dp.add_handler(CallbackQueryHandler(onboarding_handlers.choose_pay_profile_handler,
+                                        pattern='choose_pay_profile'))
+    dp.add_handler(CallbackQueryHandler(onboarding_handlers.pay_handler,
+                                        pattern=lambda x: x.startswith('pay:')))
 
     # broadcast message
     dp.add_handler(
@@ -52,18 +59,6 @@ def setup_dispatcher(dp):
 
     # handling errors
     dp.add_error_handler(error.send_stacktrace_to_tg_chat)
-
-    # EXAMPLES FOR HANDLERS
-    # dp.add_handler(MessageHandler(Filters.text, <function_handler>))
-    # dp.add_handler(MessageHandler(
-    #     Filters.document, <function_handler>,
-    # ))
-    # dp.add_handler(CallbackQueryHandler(<function_handler>, pattern="^r\d+_\d+"))
-    # dp.add_handler(MessageHandler(
-    #     Filters.chat(chat_id=int(TELEGRAM_FILESTORAGE_ID)),
-    #     # & Filters.forwarded & (Filters.photo | Filters.video | Filters.animation),
-    #     <function_handler>,
-    # ))
 
     return dp
 

@@ -2,15 +2,14 @@ pytz
 requests
 python-dotenv
 
-ipython==8.8.0  # enhanced python interpreter
+ipython==8.9.0  # enhanced python interpreter
 
 # Django
-django==4.1.5
+django==4.1.6
 django-cors-headers
 django-debug-toolbar==3.8.1
 whitenoise==6.3.0
 django-dbsettings # for storing settings in database
-django-admin-interface
 
 # Django 3.0 async requirements
 gunicorn==20.1.0
@@ -28,11 +27,11 @@ django-celery-beat==2.4.0
 # Telegram
 python-telegram-bot==13.15  # last sync version
 
-
 # Typing
 pydantic
 
 # Payments
 cloudpayments
 
-qrcode
+pillow
+qrcode==7.4

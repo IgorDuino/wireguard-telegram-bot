@@ -21,5 +21,6 @@ class VPNProfile(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True)
     ip = models.CharField(max_length=255, null=True)
     is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(null=True)
     active_until = models.DateTimeField(null=True)
     id_on_server = models.CharField(max_length=255, null=True)

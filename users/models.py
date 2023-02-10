@@ -34,7 +34,7 @@ class User(CreateUpdateTracker):
     admins = AdminUserManager()  # User.admins.all()
 
     is_trial = models.BooleanField(default=True)
-    trial_ends_at = models.DateTimeField(**nb, default=datetime.datetime.now)
+    trial_ends_at = models.DateTimeField(null=True)
 
     def __str__(self):
         return f'@{self.username}' if self.username is not None else f'{self.user_id}'
@@ -78,13 +78,3 @@ class User(CreateUpdateTracker):
             return f'@{self.username}'
         return f"{self.first_name} {self.last_name}" if self.last_name else f"{self.first_name}"
 
-
-class Location(CreateTracker):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
-
-    objects = GetOrNoneManager()
-
-    def __str__(self):
-        return f"user: {self.user}, created at {self.created_at.strftime('(%H:%M, %d %B %Y)')}"

@@ -1,5 +1,4 @@
 {% load static %}
-{#{% load static %}#}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +10,12 @@
 </head>
 <body>
 <div id="element"></div>
-
+<script>
+    const publicId = "{{ public_id }}";
+    const subscriptionPrice = {{ subscription_price }};
+    const subscriptionPeriod = {{ period }};
+    const profileServerId = "{{ profile_server_id }}";
+</script>
 <script src="{% static 'js/payment.js' %}"></script>
 </body>
 </html>

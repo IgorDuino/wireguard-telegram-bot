@@ -1,3 +1,6 @@
+from dtb.settings import TRIAL_PERIOD_DAYS
+
+
 def start_text(first_name, is_first_time):
     if is_first_time:
         text = f"""
@@ -64,7 +67,7 @@ sudo nmcli connection import type wireguard file <path_to_conf_file>
     # TODO: write telegra.ph articles
 
     text = f"""
-Пробный период: 3 дня \n
+Пробный период: {TRIAL_PERIOD_DAYS} дня \n
 Краткая инструкция по установке на ваше устройство: \n
 {instructions[device]} \n
 Полная инструкция по установке: {full_instructions_links[device]} \n
@@ -79,4 +82,28 @@ no_available_servers = """Просим прощения, но в данный м
 
 server_error = """
 Просим прощения, но в данный момент сервер недоступен. Техническая поддержка уже работает над этой проблемой.
+"""
+
+no_profiles = """
+У вас нет профилей
+"""
+
+choose_profile_text = """
+Какой профиль вы хотите оплатить?
+"""
+
+my_devices_text = """
+Ваши профили:
+"""
+
+choose_pay_period_text = """
+Выберите частоту подписки:
+"""
+
+pay_text = """
+Оплата через CloudPayments:
+"""
+
+new_profile_text = """
+Выберите устройство, с которого вы хотите подключиться к VPN:
 """
