@@ -14,18 +14,18 @@ from tgbot.handlers.broadcast_message.utils import send_one_message
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = [
-        'telegram_id', 'username', 'first_name', 'last_name',
+        'user_id', 'username', 'first_name', 'last_name',
         'language_code', 'deep_link',
         'created_at', 'updated_at', "is_blocked_bot",
     ]
     list_filter = ["is_blocked_bot", ]
-    search_fields = ('username', 'telegram_id')
+    search_fields = ('username', 'user_id')
 
     actions = ['broadcast']
 
     def broadcast(self, request, queryset):
         """ Select users via check mark in django-admin panel, then select "Broadcast" to send message"""
-        user_ids = queryset.values_list('telegram_id', flat=True).distinct().iterator()
+        user_ids = queryset.values_list('user_id', flat=True).distinct().iterator()
         if 'apply' in request.POST:
             broadcast_message_text = request.POST["broadcast_text"]
 
