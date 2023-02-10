@@ -41,7 +41,7 @@ class User(CreateUpdateTracker):
     def get_user_and_created(cls, update: Update, context: CallbackContext) -> Tuple[User, bool]:
         """ python-telegram-bot's Update, Context --> User instance """
         data = extract_user_data_from_update(update)
-        u, created = cls.objects.update_or_create(telegram_id=data["telegram_id"], defaults=data)
+        u, created = cls.objects.update_or_create(telegram_id=data["user_id"], defaults=data)
 
         if created:
             # Save deep_link to User model
