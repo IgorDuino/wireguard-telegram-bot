@@ -36,9 +36,9 @@ def choose_device_pc() -> InlineKeyboardMarkup:
 def main_menu(user: User) -> InlineKeyboardMarkup:
     user_id = user.user_id
     profiles = VPNProfile.objects.filter(user=user)
-    payment_id = None
+    profile_server_id = None
     if len(profiles) == 1:
-        payment_id = profiles[0].id_on_server
+        profile_server_id = profiles[0].id_on_server
 
     buttons = [[
         InlineKeyboardButton("💻 Мои устройства", callback_data=f'profiles'),
@@ -49,8 +49,8 @@ def main_menu(user: User) -> InlineKeyboardMarkup:
         [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'support')],
     ]
 
-    if payment_id:
-        buttons[1] = [InlineKeyboardButton("💳 Оплатить", callback_data=f'choose_pay_period:{payment_id}')]
+    if profile_server_id:
+        buttons[1] = [InlineKeyboardButton("💳 Оплатить", callback_data=f'choose_pay_period:{profile_server_id}')]
     return InlineKeyboardMarkup(buttons)
 
 
@@ -71,7 +71,7 @@ def choose_pay_profile_handler(profiles: List[VPNProfile]) -> InlineKeyboardMark
     buttons = []
     for profile in profiles:
         buttons.append([InlineKeyboardButton(f"{profile.name} - Оплачен до {profile.active_until}",
-                                             callback_data=f'choose_pay_period:{profile.id}')])
+                                             callback_data=f'choose_pay_period:{profile.server_id}')])
     buttons.append([InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu')])
     return InlineKeyboardMarkup(buttons)
 
