@@ -30,7 +30,7 @@ class User(CreateUpdateTracker):
 
     is_admin = models.BooleanField(default=False)
 
-    objects = GetOrNoneManager()  # user = User.objects.get_or_none(telegram_id=<some_id>)
+    objects = GetOrNoneManager()  # user = User.objects.get_or_none(user_id=<some_id>)
     admins = AdminUserManager()  # User.admins.all()
 
     is_trial = models.BooleanField(default=True)
@@ -43,7 +43,7 @@ class User(CreateUpdateTracker):
     def get_user_and_created(cls, update: Update, context: CallbackContext) -> Tuple[User, bool]:
         """ python-telegram-bot's Update, Context --> User instance """
         data = extract_user_data_from_update(update)
-        u, created = cls.objects.update_or_create(telegram_id=data["user_id"], defaults=data)
+        u, created = cls.objects.update_or_create(user_id=data["user_id"], defaults=data)
 
         if created:
             # Save deep_link to User model
@@ -61,11 +61,11 @@ class User(CreateUpdateTracker):
         return u
 
     @classmethod
-    def get_user_by_username_or_telegram_id(cls, username_or_telegram_id: Union[str, int]) -> Optional[User]:
+    def get_user_by_username_or_user_id(cls, username_or_user_id: Union[str, int]) -> Optional[User]:
         """ Search user in DB, return User or None if not found """
-        username = str(username_or_telegram_id).replace("@", "").strip().lower()
-        if username.isdigit():  # telegram_id
-            return cls.objects.filter(telegram_id=int(username)).first()
+        username = str(username_or_user_id).replace("@", "").strip().lower()
+        if username.isdigit():  # user_id
+            return cls.objects.filter(user_id=int(username)).first()
         return cls.objects.filter(username__iexact=username).first()
 
     @property
