@@ -79,6 +79,7 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
         return
 
     new_profile = VPNProfile.objects.create(server=server, user=user)
+    new_profile.user = user
     new_profile.created_at = datetime.now()
     new_profile.active_until = new_profile.created_at + timedelta(days=TRIAL_PERIOD_DAYS)
 
