@@ -64,7 +64,7 @@ def check(request: HttpRequest):
         Replenishment.objects.create(
             amount=amount,
             transaction_id=transaction_id,
-            date_time=datetime.strptime(data["DateTime"], "%Y-%m-%dT %H:%M:%S"),
+            date_time=datetime.strptime(data["DateTime"], "%Y-%m-%d %H:%M:%S"),
             card_first_six=data["CardFirstSix"],
             card_last_four=data["CardLastFour"],
             card_type=data["CardType"],
