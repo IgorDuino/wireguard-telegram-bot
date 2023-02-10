@@ -32,7 +32,7 @@ def setup_dispatcher(dp):
                                         pattern=lambda x: x.startswith('choose_device:')))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.profiles_handler,
                                         pattern='profiles'))
-    dp.add_handler(CallbackQueryHandler(onboarding_handlers.command_start, pattern='main_menu'))
+    dp.add_handler(CallbackQueryHandler(onboarding_handlers.main_menu_send, pattern='main_menu'))
 
     # broadcast message
     dp.add_handler(

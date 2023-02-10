@@ -129,3 +129,8 @@ def profiles_handler(update: Update, context: CallbackContext) -> None:
         return
 
     update.callback_query.edit_message_text(shop_text.my_devices_text, reply_markup=keyboards.profiles_menu(user))
+
+
+def main_menu_send(update: Update, context: CallbackContext) -> None:
+    user = User.get_user(update, context)
+    update.callback_query.edit_message_reply_markup(reply_markup=keyboards.main_menu(user))
