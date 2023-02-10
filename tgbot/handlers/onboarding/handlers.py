@@ -118,3 +118,14 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
         text=shop_text.after_device_text(device),
         reply_markup=keyboards.main_menu(user)
     )
+
+
+def profiles_handler(update: Update, context: CallbackContext) -> None:
+    user = User.get_user(update, context)
+
+    profiles = VPNProfile.objects.filter(user=user)
+    if not profiles:
+        update.callback_query.edit_message_text(shop_text.no_devices, reply_markup=keyboards.main_menu(user))
+        return
+
+    update.callback_query.edit_message_text(shop_text.my_devices_text, reply_markup=keyboards.profiles_menu(user))

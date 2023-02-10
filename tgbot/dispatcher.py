@@ -19,18 +19,20 @@ def setup_dispatcher(dp):
     """
     Adding handlers for events from Telegram
     """
-    # onboarding
+    # Usual commands
     dp.add_handler(CommandHandler("start", onboarding_handlers.command_start))
-
     dp.add_handler(CommandHandler("clear", onboarding_handlers.command_clear))
 
-    # admin commands
+    # Admin commands
     dp.add_handler(CommandHandler("admin", admin_handlers.admin))
     dp.add_handler(CommandHandler("stats", admin_handlers.stats))
 
-    # keyboard handlers
+    # Keyboard handlers
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.choose_device_handler,
                                         pattern=lambda x: x.startswith('choose_device:')))
+    dp.add_handler(CallbackQueryHandler(onboarding_handlers.profiles_handler,
+                                        pattern='profiles'))
+    dp.add_handler(CallbackQueryHandler(onboarding_handlers.command_start, pattern='main_menu'))
 
     # broadcast message
     dp.add_handler(
@@ -47,19 +49,7 @@ def setup_dispatcher(dp):
     ))
 
     # handling errors
-    # dp.add_error_handler(error.send_stacktrace_to_tg_chat)
-
-    # EXAMPLES FOR HANDLERS
-    # dp.add_handler(MessageHandler(Filters.text, <function_handler>))
-    # dp.add_handler(MessageHandler(
-    #     Filters.document, <function_handler>,
-    # ))
-    # dp.add_handler(CallbackQueryHandler(<function_handler>, pattern="^r\d+_\d+"))
-    # dp.add_handler(MessageHandler(
-    #     Filters.chat(chat_id=int(TELEGRAM_FILESTORAGE_ID)),
-    #     # & Filters.forwarded & (Filters.photo | Filters.video | Filters.animation),
-    #     <function_handler>,
-    # ))
+    dp.add_error_handler(error.send_stacktrace_to_tg_chat)
 
     return dp
 

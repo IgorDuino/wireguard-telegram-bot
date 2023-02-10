@@ -1,7 +1,10 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from dtb.settings import PAYMENT_URL, BOT_LINK
+
 from shop.models import VPNProfile
 from users.models import User
+
+from datetime import datetime
 
 
 def choose_device() -> InlineKeyboardMarkup:
@@ -53,6 +56,8 @@ def profiles_menu(user: User) -> InlineKeyboardMarkup:
     profiles = VPNProfile.objects.filter(user=user)
     buttons = []
     for profile in profiles:
-        buttons.append([InlineKeyboardButton(f"{profile.device} {profile.os}", callback_data=f'profile:{profile.id}')])
-    buttons.append([InlineKeyboardButton("🔙 Назад", callback_data=f'main_menu')])
+        buttons.append(
+            [InlineKeyboardButton(f"{profile.name} - оплачен до {datetime.strftime(profile.active_until, '%d.%m.%Y')}",
+                                  callback_data=f'profile:{profile.id}')])
+    buttons.append([InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu')])
     return InlineKeyboardMarkup(buttons)
