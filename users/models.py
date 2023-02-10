@@ -10,8 +10,6 @@ from telegram.ext import CallbackContext
 from tgbot.handlers.utils.info import extract_user_data_from_update
 from utils.models import CreateUpdateTracker, nb, CreateTracker, GetOrNoneManager
 
-import datetime
-
 
 class AdminUserManager(Manager):
     def get_queryset(self):
@@ -19,7 +17,7 @@ class AdminUserManager(Manager):
 
 
 class User(CreateUpdateTracker):
-    user_id = models.PositiveBigIntegerField(primary_key=True)  # telegram_id
+    telegram_id = models.PositiveBigIntegerField(primary_key=True)  # telegram_id
     username = models.CharField(max_length=32, **nb)
     first_name = models.CharField(max_length=256)
     last_name = models.CharField(max_length=256, **nb)
@@ -37,7 +35,7 @@ class User(CreateUpdateTracker):
     trial_ends_at = models.DateTimeField(null=True)
 
     def __str__(self):
-        return f'@{self.username}' if self.username is not None else f'{self.user_id}'
+        return f'@{self.username}' if self.username is not None else f'{self.telegram_id}'
 
     @classmethod
     def get_user_and_created(cls, update: Update, context: CallbackContext) -> Tuple[User, bool]:
@@ -70,11 +68,10 @@ class User(CreateUpdateTracker):
 
     @property
     def invited_users(self) -> QuerySet[User]:
-        return User.objects.filter(deep_link=str(self.user_id), created_at__gt=self.created_at)
+        return User.objects.filter(deep_link=str(self.telegram_id), created_at__gt=self.created_at)
 
     @property
     def tg_str(self) -> str:
         if self.username:
             return f'@{self.username}'
         return f"{self.first_name} {self.last_name}" if self.last_name else f"{self.first_name}"
-

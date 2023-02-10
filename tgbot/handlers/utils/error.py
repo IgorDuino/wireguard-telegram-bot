@@ -32,7 +32,7 @@ def send_stacktrace_to_tg_chat(update: Update, context: CallbackContext) -> None
 Вернуться к /start
 """
     context.bot.send_message(
-        chat_id=u.user_id,
+        chat_id=u.telegram_id,
         text=user_message,
     )
 

@@ -29,7 +29,7 @@ def choose_device_pc() -> InlineKeyboardMarkup:
 
 
 def main_menu(user: User) -> InlineKeyboardMarkup:
-    user_id = user.user_id
+    user_id = user.telegram_id
     profiles = VPNProfile.objects.filter(user=user)
     payment_id = None
     if len(profiles) == 1:
