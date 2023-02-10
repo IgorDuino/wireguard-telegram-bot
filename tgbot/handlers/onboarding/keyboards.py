@@ -34,22 +34,25 @@ def main_menu(user: User) -> InlineKeyboardMarkup:
     payment_id = None
     if len(profiles) == 1:
         payment_id = profiles[0].id_on_server
-    if payment_id:
-        buttons = [[
-            InlineKeyboardButton("💻 Мои устройства", callback_data=f'my_devices'),
-            InlineKeyboardButton("👥 Пригласить друга", url=f'{BOT_LINK}?start={user_id}'),
-        ],
-            [InlineKeyboardButton("💳 Оплатить", web_app=WebAppInfo(url=f"{PAYMENT_URL}?uid={payment_id}"))],
-            [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'main_menu:support')],
-        ]
 
-        return InlineKeyboardMarkup(buttons)
     buttons = [[
-        InlineKeyboardButton("💻 Мои устройства", callback_data=f'my_devices'),
+        InlineKeyboardButton("💻 Мои устройства", callback_data=f'profiles'),
         InlineKeyboardButton("👥 Пригласить друга", url=f'{BOT_LINK}?start={user_id}'),
     ],
         [InlineKeyboardButton("💳 Оплатить", callback_data=f'main_menu:choose_profile_to_pay')],
         [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'main_menu:support')],
     ]
 
+    if payment_id:
+        buttons[1] = [InlineKeyboardButton("💳 Оплатить", web_app=WebAppInfo(url=f"{PAYMENT_URL}?uid={payment_id}"))]
+
+    return InlineKeyboardMarkup(buttons)
+
+
+def profiles_menu(user: User) -> InlineKeyboardMarkup:
+    profiles = VPNProfile.objects.filter(user=user)
+    buttons = []
+    for profile in profiles:
+        buttons.append([InlineKeyboardButton(f"{profile.device} {profile.os}", callback_data=f'profile:{profile.id}')])
+    buttons.append([InlineKeyboardButton("🔙 Назад", callback_data=f'main_menu')])
     return InlineKeyboardMarkup(buttons)
