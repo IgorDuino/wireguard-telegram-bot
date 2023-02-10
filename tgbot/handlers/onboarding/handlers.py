@@ -161,3 +161,8 @@ def pay_handler(update: Update, context: CallbackContext) -> None:
     period = int(update.callback_query.data.split(':')[2]) * 30
     update.callback_query.edit_message_text(text=shop_text.pay_text,
                                             reply_markup=keyboards.pay_button(profile, period))
+
+
+def new_profile_handler(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text(text=shop_text.new_profile_text,
+                              reply_markup=keyboards.choose_device())

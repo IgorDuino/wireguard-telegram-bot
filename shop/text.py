@@ -99,3 +99,7 @@ choose_pay_period_text = """
 pay_text = """
 Оплата через CloudPayments:
 """
+
+new_profile_text = """
+Выберите устройство, с которого вы хотите подключиться к VPN:
+"""

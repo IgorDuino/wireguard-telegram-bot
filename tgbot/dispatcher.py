@@ -30,6 +30,8 @@ def setup_dispatcher(dp):
     # Keyboard handlers
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.choose_device_handler,
                                         pattern=lambda x: x.startswith('choose_device:')))
+    dp.add_handler(CallbackQueryHandler(onboarding_handlers.new_profile_handler,
+                                        pattern='new_profile'))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.profiles_handler,
                                         pattern='profiles'))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.main_menu_send, pattern='main_menu'))

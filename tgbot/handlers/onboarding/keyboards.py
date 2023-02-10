@@ -45,6 +45,7 @@ def main_menu(user: User) -> InlineKeyboardMarkup:
         InlineKeyboardButton("👥 Пригласить друга", url=f'{BOT_LINK}?start={user_id}'),
     ],
         [InlineKeyboardButton("💳 Оплатить", callback_data=f'choose_pay_profile')],
+        [InlineKeyboardButton("➕ Добавить профиль", callback_data=f'new_profile')],
         [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'support')],
     ]
 
@@ -60,6 +61,8 @@ def profiles_menu(user: User) -> InlineKeyboardMarkup:
         buttons.append(
             [InlineKeyboardButton(f"{profile.name} - оплачен до {datetime.strftime(profile.active_until, '%d.%m.%Y')}",
                                   callback_data=f'profile:{profile.id}')])
+
+    buttons.append([InlineKeyboardButton("➕ Добавить профиль", callback_data=f'new_profile')])
     buttons.append([InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu')])
     return InlineKeyboardMarkup(buttons)
 
