@@ -13,16 +13,16 @@ payments.oncomplete = (result) => {
 
 payments.pay("charge", {
     publicId: publicId,
-    accountId: uid,
-    description: 'Подписка CrocVPN 1 месяц',
+    accountId: profileServerId,
+    description: 'Подписка CrocVPN ' + subscriptionPeriod + ' дней',
     amount: subscriptionPrice,
     currency: 'RUB',
     skin: 'modern',
     data: {
         CloudPayments: {
             recurrent: {
-                interval: 'Month',
-                period: 1,
+                interval: 'Day',
+                period: subscriptionPeriod,
             }
         }
     }

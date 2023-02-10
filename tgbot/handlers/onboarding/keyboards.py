@@ -6,6 +6,8 @@ from users.models import User
 
 from datetime import datetime
 
+from typing import List
+
 
 def choose_device() -> InlineKeyboardMarkup:
     buttons = [[
@@ -42,13 +44,12 @@ def main_menu(user: User) -> InlineKeyboardMarkup:
         InlineKeyboardButton("💻 Мои устройства", callback_data=f'profiles'),
         InlineKeyboardButton("👥 Пригласить друга", url=f'{BOT_LINK}?start={user_id}'),
     ],
-        [InlineKeyboardButton("💳 Оплатить", callback_data=f'main_menu:choose_profile_to_pay')],
-        [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'main_menu:support')],
+        [InlineKeyboardButton("💳 Оплатить", callback_data=f'choose_pay_profile')],
+        [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'support')],
     ]
 
     if payment_id:
-        buttons[1] = [InlineKeyboardButton("💳 Оплатить", web_app=WebAppInfo(url=f"{PAYMENT_URL}?uid={payment_id}"))]
-
+        buttons[1] = [InlineKeyboardButton("💳 Оплатить", callback_data=f'choose_pay_period:{payment_id}')]
     return InlineKeyboardMarkup(buttons)
 
 
@@ -60,4 +61,32 @@ def profiles_menu(user: User) -> InlineKeyboardMarkup:
             [InlineKeyboardButton(f"{profile.name} - оплачен до {datetime.strftime(profile.active_until, '%d.%m.%Y')}",
                                   callback_data=f'profile:{profile.id}')])
     buttons.append([InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu')])
+    return InlineKeyboardMarkup(buttons)
+
+
+def choose_pay_profile_handler(profiles: List[VPNProfile]) -> InlineKeyboardMarkup:
+    buttons = []
+    for profile in profiles:
+        buttons.append([InlineKeyboardButton(f"{profile.name} - Оплачен до {profile.active_until}",
+                                             callback_data=f'choose_pay_period:{profile.id}')])
+    buttons.append([InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu')])
+    return InlineKeyboardMarkup(buttons)
+
+
+def choose_pay_period(profile_server_id) -> InlineKeyboardMarkup:
+    buttons = [
+        [
+            InlineKeyboardButton("1 месяц", callback_data=f'pay:{profile_server_id}:1'),
+            InlineKeyboardButton("3 месяца", callback_data=f'pay:{profile_server_id}:3'),
+            InlineKeyboardButton("6 месяцев", callback_data=f'pay:{profile_server_id}:6'),
+        ],
+        [InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu')],
+    ]
+
+    return InlineKeyboardMarkup(buttons)
+
+
+def pay_button(profile: VPNProfile, period: int) -> InlineKeyboardMarkup:
+    buttons = [[InlineKeyboardButton(f"💳 Оплатить профиль {profile.name} на {period} дней", web_app=WebAppInfo(
+        url=f"{PAYMENT_URL}?server_id={profile.id_on_server}&period={period}"))]]
     return InlineKeyboardMarkup(buttons)

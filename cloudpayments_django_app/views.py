@@ -38,12 +38,18 @@ def check_signature(request: HttpRequest):
 
 
 def index(request: HttpRequest):
-    uid = request.GET.get('uid')
-    if not uid:
-        return HttpResponse('uid is required')
+    profile_server_id = request.GET.get('server_id')
+    period = request.GET.get('period')
+
+    if not profile_server_id:
+        return HttpResponse('Server id is required', status=400)
+    if period not in [30, 90, 180]:
+        return HttpResponse('Invalid period', status=400)
+
     return render(request, 'pay.html', {"public_id": CLOUDPAYMENTS_PUBLIC_ID,
-                                        "subscription_price": SUBSCRIPTION_PRICE,
-                                        "uid": uid})
+                                        "subscription_price": SUBSCRIPTION_PRICE * period / 30,
+                                        "period": period,
+                                        "profile_server_id": profile_server_id})
 
 
 # TODO: use django form instead of QueryDict
