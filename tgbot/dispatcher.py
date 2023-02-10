@@ -38,6 +38,9 @@ def setup_dispatcher(dp):
                                         pattern=lambda x: x.startswith('choose_pay_period:')))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.choose_pay_profile_handler,
                                         pattern='choose_pay_profile'))
+    dp.add_handler(CallbackQueryHandler(onboarding_handlers.pay_handler,
+                                        pattern=lambda x: x.startswith('pay:')))
+
     # broadcast message
     dp.add_handler(
         MessageHandler(Filters.regex(rf'^{broadcast_command}(/s)?.*'),

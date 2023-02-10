@@ -154,7 +154,7 @@ def choose_pay_profile_handler(update: Update, context: CallbackContext) -> None
                                             reply_markup=keyboards.choose_pay_profile_handler(profiles))
 
 
-def pay(update: Update, context: CallbackContext) -> None:
+def pay_handler(update: Update, context: CallbackContext) -> None:
     user = User.get_user(update, context)
     profile_server_id = update.callback_query.data.split(':')[1]
     profile = VPNProfile.objects.get(id_on_server=profile_server_id)
