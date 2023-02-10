@@ -47,7 +47,7 @@ def setup_dispatcher(dp):
     ))
 
     # handling errors
-    dp.add_error_handler(error.send_stacktrace_to_tg_chat)
+    # dp.add_error_handler(error.send_stacktrace_to_tg_chat)
 
     # EXAMPLES FOR HANDLERS
     # dp.add_handler(MessageHandler(Filters.text, <function_handler>))
