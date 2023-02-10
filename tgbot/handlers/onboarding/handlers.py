@@ -156,6 +156,9 @@ def choose_pay_profile_handler(update: Update, context: CallbackContext) -> None
 
 def pay_handler(update: Update, context: CallbackContext) -> None:
     user = User.get_user(update, context)
+
+    logging.warning(update.callback_query.data)
+
     profile_server_id = update.callback_query.data.split(':')[1]
     profile = VPNProfile.objects.filter(id_on_server=profile_server_id).first()
 
