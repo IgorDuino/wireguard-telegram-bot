@@ -73,7 +73,7 @@ def check(request: HttpRequest):
             subscription_id=data.get("SubscriptionId"),
             ip_address=data.get("IpAddress"),
             payment_method=data.get("PaymentMethod"),
-            is_test=data["IsTest"]
+            is_test=data["TestMode"]
         )
         logging.warning(f'New replenishment: {transaction_id}')
         return HttpResponse({"code": 0}, content_type='application/json')
