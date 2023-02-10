@@ -161,6 +161,7 @@ if TELEGRAM_TOKEN is None:
     sys.exit(1)
 
 TELEGRAM_LOGS_CHAT_ID = os.getenv("TELEGRAM_LOGS_CHAT_ID", default=None)
+BOT_LINK = os.getenv("BOT_LINK")
 CLOUDPAYMENTS_PUBLIC_ID = os.getenv("CLOUDPAYMENTS_PUBLIC_ID")
 CLOUDPAYMENTS_SECRET_KEY = os.getenv("CLOUDPAYMENTS_SECRET_KEY")
 GARPIX_PAYMENT_STATUS_CHANGED_CALLBACK = 'cloudpayments_django_app.views.payment_status_changed_callback'

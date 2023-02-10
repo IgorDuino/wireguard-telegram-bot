@@ -25,14 +25,13 @@ def command_start(update: Update, context: CallbackContext) -> None:
 
     text = shop_text.start_text(user.first_name, created)
 
-    bot_link = f"https://t.me/{context.bot.username}"
     if created:
         if start_code:
             user.deep_link = start_code
             user.save()
         keyboard = choose_device()
     else:
-        keyboard = main_menu(bot_link=bot_link, user=user)
+        keyboard = main_menu(user)
 
     update.message.reply_text(text=text,
                               reply_markup=keyboard)
@@ -45,8 +44,7 @@ def command_clear(update: Update, context: CallbackContext) -> None:
                                     reply_markup=ReplyKeyboardRemove())
     context.bot.delete_message(chat_id=update.message.chat_id, message_id=msg.message_id)
     context.bot.send_message(chat_id=update.message.chat_id, text='Главное меню',
-                             reply_markup=main_menu(bot_link=f"https://t.me/{context.bot.username}",
-                                                    user=user))
+                             reply_markup=main_menu(user))
 
 
 def choose_device_handler(update: Update, context: CallbackContext) -> None:
@@ -94,7 +92,6 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
     config = wg.get_client_configuration(server_profile['id'])
     qr_code = wg.get_client_qr_code(server_profile['id'])
 
-    bot_link = f"https://t.me/{context.bot.username}"
     context.bot.delete_message(
         chat_id=user_id,
         message_id=update.callback_query.message.message_id
@@ -112,5 +109,5 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
     context.bot.send_message(
         chat_id=user_id,
         text=shop_text.after_device_text(device),
-        reply_markup=main_menu(bot_link=bot_link, user=user)
+        reply_markup=main_menu(user)
     )

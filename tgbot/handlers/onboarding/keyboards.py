@@ -1,5 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
-from dtb.settings import PAYMENT_URL
+from dtb.settings import PAYMENT_URL, BOT_LINK
 from shop.models import VPNProfile
 from users.models import User
 
@@ -28,7 +28,7 @@ def choose_device_pc() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(buttons)
 
 
-def main_menu(bot_link: str, user: User) -> InlineKeyboardMarkup:
+def main_menu(user: User) -> InlineKeyboardMarkup:
     user_id = user.user_id
     profiles = VPNProfile.objects.filter(user=user)
     payment_id = None
@@ -37,7 +37,7 @@ def main_menu(bot_link: str, user: User) -> InlineKeyboardMarkup:
     if payment_id:
         buttons = [[
             InlineKeyboardButton("💻 Мои устройства", callback_data=f'my_devices'),
-            InlineKeyboardButton("👥 Пригласить друга", url=f'{bot_link}?start={user_id}'),
+            InlineKeyboardButton("👥 Пригласить друга", url=f'{BOT_LINK}?start={user_id}'),
         ],
             [InlineKeyboardButton("💳 Оплатить", web_app=WebAppInfo(url=f"{PAYMENT_URL}?uid={payment_id}"))],
             [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'main_menu:support')],
@@ -46,7 +46,7 @@ def main_menu(bot_link: str, user: User) -> InlineKeyboardMarkup:
         return InlineKeyboardMarkup(buttons)
     buttons = [[
         InlineKeyboardButton("💻 Мои устройства", callback_data=f'my_devices'),
-        InlineKeyboardButton("👥 Пригласить друга", url=f'{bot_link}?start={user_id}'),
+        InlineKeyboardButton("👥 Пригласить друга", url=f'{BOT_LINK}?start={user_id}'),
     ],
         [InlineKeyboardButton("💳 Оплатить", callback_data=f'main_menu:choose_profile_to_pay')],
         [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'main_menu:support')],
