@@ -158,7 +158,9 @@ def pay_handler(update: Update, context: CallbackContext) -> None:
     user = User.get_user(update, context)
 
     profile_server_id = update.callback_query.data.split(':')[1]
+    logging.info(f'profile_server_id: {profile_server_id}')
     profile = VPNProfile.objects.filter(id_on_server=profile_server_id).first()
+    logging.info(f'profile: {profile}')
     period = int(update.callback_query.data.split(':')[2]) * 30
     update.callback_query.edit_message_text(text=shop_text.pay_text,
                                             reply_markup=keyboards.pay_button(profile, period))
