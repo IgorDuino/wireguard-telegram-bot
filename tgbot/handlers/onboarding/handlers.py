@@ -1,3 +1,5 @@
+import logging
+
 from telegram import Update, ReplyKeyboardRemove
 from telegram.ext import CallbackContext
 
@@ -60,7 +62,9 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
     # TODO in future: prefer to connect to the same server as user was connected before
 
     server = VPNServer.objects.filter(is_active=True).order_by('?').first()
+
     if server is None:
+        logging.error(f'No available servers {server}')
         update.callback_query.edit_message_text(text=shop_text.no_available_servers)
         # TODO: send message to support
         return
