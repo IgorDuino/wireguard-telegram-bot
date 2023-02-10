@@ -5,7 +5,7 @@ from telegram.ext import CallbackContext
 
 from tgbot.handlers.utils.info import extract_user_data_from_update
 from users.models import User
-from tgbot.handlers.onboarding.keyboards import choose_device, choose_device_pc, main_menu
+import tgbot.handlers.onboarding.keyboards as keyboards
 
 from shop import text as shop_text
 from shop.utils import wireguard_client
@@ -13,7 +13,7 @@ from shop.models import VPNServer, VPNProfile
 
 from datetime import datetime, timedelta
 
-from dtb.settings import TRIAL_PERIOD_DAYS
+from dtb.settings import TRIAL_PERIOD_DAYS, ROOT_ADMIN_ID
 
 import random
 import string
@@ -29,9 +29,9 @@ def command_start(update: Update, context: CallbackContext) -> None:
         if start_code:
             user.deep_link = start_code
             user.save()
-        keyboard = choose_device()
+        keyboard = keyboards.choose_device()
     else:
-        keyboard = main_menu(user)
+        keyboard = keyboards.main_menu(user)
 
     update.message.reply_text(text=text,
                               reply_markup=keyboard)
@@ -44,7 +44,7 @@ def command_clear(update: Update, context: CallbackContext) -> None:
                                     reply_markup=ReplyKeyboardRemove())
     context.bot.delete_message(chat_id=update.message.chat_id, message_id=msg.message_id)
     context.bot.send_message(chat_id=update.message.chat_id, text='Главное меню',
-                             reply_markup=main_menu(user))
+                             reply_markup=keyboards.main_menu(user))
 
 
 def choose_device_handler(update: Update, context: CallbackContext) -> None:
@@ -54,26 +54,33 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
     device = update.callback_query.data.split(':')[1]
 
     if device == 'pc':
-        update.callback_query.edit_message_reply_markup(reply_markup=choose_device_pc())
+        update.callback_query.edit_message_reply_markup(reply_markup=keyboards.choose_device_pc())
         return
 
     # TODO in future: prefer to connect to the same server as user was connected before
 
-    server = VPNServer.objects.filter(is_active=True).order_by('?').first()
+    servers = VPNServer.objects.filter(is_active=True).order_by('?').all()
 
-    if server is None:
-        logging.error(f'No available servers {server}')
+    if len(servers) == 0:
+        logging.error(f'No available servers')
         update.callback_query.edit_message_text(text=shop_text.no_available_servers)
-        # TODO: send message to support
+        context.bot.send_message(chat_id=ROOT_ADMIN_ID,
+                                 text=f'No servers')
         return
 
-    try:
-        wg = wireguard_client.WireguardApiClient(server.wireguard_api_url, server.password)
-    except wireguard_client.AuthError:
-        # TODO: send message to support
-        # TODO in future: add server to blacklist
-        # TODO in future: try to connect to another server
-        update.callback_query.edit_message_text(text=shop_text.server_error)
+    for server in servers:
+        try:
+            wg = wireguard_client.WireguardApiClient(server.wireguard_api_url, server.password)
+            break
+        except wireguard_client.AuthError:
+            context.bot.send_message(chat_id=ROOT_ADMIN_ID,
+                                     text=f'Wireguard server {server} auth error')
+            # TODO: mark server as inactive
+    else:
+        logging.error(f'All servers are unavailable')
+        update.callback_query.edit_message_text(text=shop_text.no_available_servers)
+        context.bot.send_message(chat_id=ROOT_ADMIN_ID,
+                                 text=f'All servers are unavailable')
         return
 
     new_profile = VPNProfile.objects.create(server=server, user=user)
@@ -109,5 +116,5 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
     context.bot.send_message(
         chat_id=user_id,
         text=shop_text.after_device_text(device),
-        reply_markup=main_menu(user)
+        reply_markup=keyboards.main_menu(user)
     )
