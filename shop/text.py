@@ -1,3 +1,6 @@
+from dtb.settings import TRIAL_PERIOD_DAYS
+
+
 def start_text(first_name, is_first_time):
     if is_first_time:
         text = f"""
@@ -64,7 +67,7 @@ sudo nmcli connection import type wireguard file <path_to_conf_file>
     # TODO: write telegra.ph articles
 
     text = f"""
-Пробный период: 3 дня \n
+Пробный период: {TRIAL_PERIOD_DAYS} дня \n
 Краткая инструкция по установке на ваше устройство: \n
 {instructions[device]} \n
 Полная инструкция по установке: {full_instructions_links[device]} \n

@@ -34,7 +34,7 @@ class User(CreateUpdateTracker):
     admins = AdminUserManager()  # User.admins.all()
 
     is_trial = models.BooleanField(default=True)
-    trial_ends_at = models.DateTimeField(**nb, default=datetime.datetime.now)
+    trial_ends_at = models.DateTimeField(null=True)
 
     def __str__(self):
         return f'@{self.username}' if self.username is not None else f'{self.user_id}'

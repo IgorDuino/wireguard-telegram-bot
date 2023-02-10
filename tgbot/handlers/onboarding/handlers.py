@@ -9,6 +9,10 @@ from shop import text as shop_text
 from shop.utils import wireguard_client
 from shop.models import VPNServer, VPNProfile
 
+from datetime import timedelta
+
+from dtb.settings import TRIAL_PERIOD_DAYS
+
 import random
 import string
 
@@ -71,6 +75,7 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
         return
 
     new_profile = VPNProfile.objects.create(server=server, user=user)
+    new_profile.active_until = new_profile.created_at + timedelta(days=TRIAL_PERIOD_DAYS)
 
     name = f"{server.city}_{''.join(random.choice(string.ascii_lowercase) for _ in range(10))}{str(new_profile.id)}"
     server_profile = wg.create_profile(name)

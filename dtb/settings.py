@@ -165,6 +165,7 @@ CLOUDPAYMENTS_PUBLIC_ID = os.getenv("CLOUDPAYMENTS_PUBLIC_ID")
 CLOUDPAYMENTS_SECRET_KEY = os.getenv("CLOUDPAYMENTS_SECRET_KEY")
 GARPIX_PAYMENT_STATUS_CHANGED_CALLBACK = 'cloudpayments_django_app.views.payment_status_changed_callback'
 SUBSCRIPTION_PRICE = 300
+TRIAL_PERIOD_DAYS = 3
 
 # -----> SENTRY
 # import sentry_sdk
