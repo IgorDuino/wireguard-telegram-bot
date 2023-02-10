@@ -71,7 +71,7 @@ def choose_pay_profile_handler(profiles: List[VPNProfile]) -> InlineKeyboardMark
     buttons = []
     for profile in profiles:
         buttons.append([InlineKeyboardButton(f"{profile.name} - Оплачен до {profile.active_until}",
-                                             callback_data=f'choose_pay_period:{profile.server_id}')])
+                                             callback_data=f'choose_pay_period:{profile.id_on_server}')])
     buttons.append([InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu')])
     return InlineKeyboardMarkup(buttons)
 
