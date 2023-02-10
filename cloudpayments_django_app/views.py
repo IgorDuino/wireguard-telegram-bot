@@ -39,7 +39,7 @@ def check_signature(request: HttpRequest):
 
 def index(request: HttpRequest):
     profile_server_id = request.GET.get('server_id')
-    period = request.GET.get('period')
+    period = int(request.GET.get('period'))
     logging.warning(profile_server_id, period, type(period))
 
     if not profile_server_id:
