@@ -1,5 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
-from dtb.settings import PAYMENT_URL, BOT_LINK
+from dtb.settings import PAYMENT_URL, BOT_LINK, TELEGRAPH_INSTRUCTION_LINK
 
 from shop.models import VPNProfile
 from users.models import User
@@ -64,6 +64,20 @@ def profiles_menu(user: User) -> InlineKeyboardMarkup:
 
     buttons.append([InlineKeyboardButton("➕ Добавить профиль", callback_data=f'new_profile')])
     buttons.append([InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu')])
+    return InlineKeyboardMarkup(buttons)
+
+
+def profile_menu(profile: VPNProfile) -> InlineKeyboardMarkup:
+    buttons = [
+        [InlineKeyboardButton("⬇ Скачать файл конфигурации",
+                              callback_data=f'download_configuration:{profile.id}')],
+        [InlineKeyboardButton("📝 Инструкция по подключению", url=TELEGRAPH_INSTRUCTION_LINK)],
+        [InlineKeyboardButton("💳 Продлить подписку",
+                              callback_data=f'prolongate_subscription:{profile.id}')],
+        [InlineKeyboardButton("🟥 Отказаться от профиля",
+                              callback_data=f'close_profile_submit:{profile.id}')]
+    ]
+
     return InlineKeyboardMarkup(buttons)
 
 

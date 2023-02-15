@@ -1,5 +1,6 @@
 import logging
 
+from click_repl import repl
 from telegram import Update, ReplyKeyboardRemove
 from telegram.ext import CallbackContext
 
@@ -129,6 +130,13 @@ def profiles_handler(update: Update, context: CallbackContext) -> None:
         return
 
     update.callback_query.edit_message_text(shop_text.my_devices_text, reply_markup=keyboards.profiles_menu(user))
+
+
+def profile_handler(update: Update, context: CallbackContext) -> None:
+    profile_id = update.callback_query.data.split(':')[1]
+    profile = VPNProfile.objects.filter(id=profile_id).first()
+    update.callback_query.edit_message_text(f"Профиль {profile.name}",
+                                            reply_markup=keyboards.profile_menu(profile))
 
 
 def main_menu_send(update: Update, context: CallbackContext) -> None:

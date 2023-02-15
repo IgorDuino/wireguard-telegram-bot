@@ -34,6 +34,8 @@ def setup_dispatcher(dp):
                                         pattern='new_profile'))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.profiles_handler,
                                         pattern='profiles'))
+    dp.add_handler(CallbackQueryHandler(onboarding_handlers.profile_handler,
+                                        pattern=lambda x: x.startswith('profile:')))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.main_menu_send, pattern='main_menu'))
 
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.choose_pay_period_handler,
