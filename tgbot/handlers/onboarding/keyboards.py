@@ -9,6 +9,10 @@ from datetime import datetime
 from typing import List
 
 
+def empty_menu():
+    return InlineKeyboardMarkup([[]])
+
+
 def choose_device() -> InlineKeyboardMarkup:
     buttons = [[
         InlineKeyboardButton("📱 Android", callback_data=f'choose_device:android'),
