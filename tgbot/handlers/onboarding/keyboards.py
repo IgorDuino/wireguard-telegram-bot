@@ -79,7 +79,8 @@ def profile_menu(profile: VPNProfile) -> InlineKeyboardMarkup:
         [InlineKeyboardButton("💳 Продлить подписку",
                               callback_data=f'prolongate_subscription:{profile.id}')],
         [InlineKeyboardButton("🟥 Отказаться от профиля",
-                              callback_data=f'close_profile_submit:{profile.id}')]
+                              callback_data=f'close_profile_submit:{profile.id}')],
+        [InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu')]
     ]
 
     return InlineKeyboardMarkup(buttons)
