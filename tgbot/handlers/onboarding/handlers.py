@@ -1,6 +1,5 @@
 import logging
 
-from click_repl import repl
 from telegram import Update, ReplyKeyboardRemove
 from telegram.ext import CallbackContext
 
@@ -137,6 +136,27 @@ def profile_handler(update: Update, context: CallbackContext) -> None:
     profile = VPNProfile.objects.filter(id=profile_id).first()
     update.callback_query.edit_message_text(f"Профиль {profile.name}",
                                             reply_markup=keyboards.profile_menu(profile))
+
+
+def download_configuration_handler(update: Update, context: CallbackContext) -> None:
+    user = User.get_user(update, context)
+
+    profile_id = update.callback_query.data.split(':')[1]
+    profile = VPNProfile.objects.filter(id=profile_id).first()
+
+    wg = wireguard_client.WireguardApiClient(profile.server.wireguard_api_url, profile.server.password)
+    config = wg.get_client_configuration(profile.id_on_server)
+
+    update.callback_query.delete_message()
+    context.bot.send_document(
+        chat_id=update.callback_query.message.chat_id,
+        caption="Файл конфигурации",
+        document=config,
+        filename=f'{profile.name}.conf',
+    )
+    context.bot.send_message(update.callback_query.message.chat_id,
+                             "Главное меню",
+                             reply_markup=keyboards.main_menu(user))
 
 
 def main_menu_send(update: Update, context: CallbackContext) -> None:
