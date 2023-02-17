@@ -1,6 +1,6 @@
 pytz
 requests
-python-dotenv
+python-decouple
 
 ipython==8.9.0  # enhanced python interpreter
 

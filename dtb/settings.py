@@ -1,9 +1,11 @@
 import logging
 import os
 import sys
+import random
+import string
+from decouple import config
 
 import dj_database_url
-import dotenv
 
 from pathlib import Path
 
@@ -12,19 +14,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load env variables from file
 dotenv_file = BASE_DIR / ".env"
-if os.path.isfile(dotenv_file):
-    dotenv.load_dotenv(dotenv_file)
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv(
-    "DJANGO_SECRET_KEY",
-    'x%#3&%giwv8f0+%r946en7z&d@9*rc$sl0qoql56xr%bh^w2mj',
-)
+def generate_secret():
+    default_secret_key_alphabet_list = list((string.ascii_letters + string.digits) * 2)
+    random.shuffle(default_secret_key_alphabet_list)
+    return ''.join(default_secret_key_alphabet_list)[:64]
 
-if os.environ.get('DJANGO_DEBUG', default=False) in ['True', 'true', '1', True]:
-    DEBUG = True
-else:
-    DEBUG = False
+
+SECRET_KEY = config(
+    "DJANGO_SECRET_KEY",
+    default=generate_secret())
+
+DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ["*", ]  # since Telegram uses a lot of IPs for webhooks
 
@@ -62,9 +65,9 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-MAIN_URL = os.getenv("URL", "http://localhost:8000")
-PAYMENT_URL = os.getenv("PAYMENT_URL", "https://core.croc-vpn.com/pay")
-ROOT_ADMIN_ID = os.getenv("ROOT_ADMIN_ID")
+MAIN_URL = config("URL", default="http://localhost:8000")
+PAYMENT_URL = config("PAYMENT_URL")
+ROOT_ADMIN_ID = config("ROOT_ADMIN_ID")
 
 CSRF_TRUSTED_ORIGINS = [MAIN_URL]
 
@@ -141,7 +144,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 # -----> CELERY
-REDIS_URL = os.getenv('REDIS_URL', 'redis://redis:6379')
+REDIS_URL = config('REDIS_URL', default='redis://redis:6379')
 BROKER_URL = REDIS_URL
 CELERY_BROKER_URL = REDIS_URL
 CELERY_RESULT_BACKEND = REDIS_URL
@@ -151,10 +154,11 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_TASK_DEFAULT_QUEUE = 'default'
 
-TELEGRAPH_INSTRUCTION_LINK = os.getenv("TELEGRAPH_INSTRUCTION_LINK")
 
 # -----> TELEGRAM
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+TELEGRAM_TOKEN = config("TELEGRAM_TOKEN")
+TELEGRAPH_INSTRUCTION_LINK = config("TELEGRAPH_INSTRUCTION_LINK")
+
 if TELEGRAM_TOKEN is None:
     logging.error(
         "Please provide TELEGRAM_TOKEN in .env file.\n"
@@ -162,10 +166,10 @@ if TELEGRAM_TOKEN is None:
     )
     sys.exit(1)
 
-TELEGRAM_LOGS_CHAT_ID = os.getenv("TELEGRAM_LOGS_CHAT_ID", default=None)
-BOT_LINK = os.getenv("BOT_LINK")
-CLOUDPAYMENTS_PUBLIC_ID = os.getenv("CLOUDPAYMENTS_PUBLIC_ID")
-CLOUDPAYMENTS_SECRET_KEY = os.getenv("CLOUDPAYMENTS_SECRET_KEY")
+TELEGRAM_LOGS_CHAT_ID = config("TELEGRAM_LOGS_CHAT_ID", default=None)
+BOT_LINK = config("BOT_LINK")
+CLOUDPAYMENTS_PUBLIC_ID = config("CLOUDPAYMENTS_PUBLIC_ID")
+CLOUDPAYMENTS_SECRET_KEY = config("CLOUDPAYMENTS_SECRET_KEY")
 GARPIX_PAYMENT_STATUS_CHANGED_CALLBACK = 'cloudpayments_django_app.views.payment_status_changed_callback'
 SUBSCRIPTION_PRICE = 300
 TRIAL_PERIOD_DAYS = 3
