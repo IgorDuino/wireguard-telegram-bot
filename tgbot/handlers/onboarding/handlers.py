@@ -155,8 +155,8 @@ def download_configuration_handler(update: Update, context: CallbackContext) -> 
         filename=f'{profile.name}.conf',
     )
     context.bot.send_message(update.callback_query.message.chat_id,
-                             "Главное меню",
-                             reply_markup=keyboards.main_menu(user))
+                             f"Профиль {profile.name}",
+                             reply_markup=keyboards.profile_menu(profile))
 
 
 def main_menu_send(update: Update, context: CallbackContext) -> None:
