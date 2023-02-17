@@ -173,23 +173,4 @@ CLOUDPAYMENTS_SECRET_KEY = config("CLOUDPAYMENTS_SECRET_KEY")
 GARPIX_PAYMENT_STATUS_CHANGED_CALLBACK = 'cloudpayments_django_app.views.payment_status_changed_callback'
 SUBSCRIPTION_PRICE = 300
 TRIAL_PERIOD_DAYS = 3
-
-# -----> SENTRY
-# import sentry_sdk
-# from sentry_sdk.integrations.django import DjangoIntegration
-# from sentry_sdk.integrations.celery import CeleryIntegration
-# from sentry_sdk.integrations.redis import RedisIntegration
-
-# sentry_sdk.init(
-#     dsn="INPUT ...ingest.sentry.io/ LINK",
-#     integrations=[
-#         DjangoIntegration(),
-#         CeleryIntegration(),
-#         RedisIntegration(),
-#     ],
-#     traces_sample_rate=0.1,
-
-#     # If you wish to associate users to errors (assuming you are using
-#     # django.contrib.auth) you may enable sending PII data.
-#     send_default_pii=True
-# )
+MAXIMUM_PROFILES = config('MAXIMUM_PROFILES', cast=int, default=5)
