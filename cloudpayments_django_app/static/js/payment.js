@@ -11,7 +11,7 @@ payments.oncomplete = (result) => {
 }
 
 
-payments.pay("ch    arge", {
+payments.pay("charge", {
     publicId: publicId,
     accountId: profileServerId,
     description: 'Подписка CrocVPN ' + subscriptionPeriod + ' дней',
