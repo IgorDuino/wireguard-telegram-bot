@@ -122,6 +122,10 @@ def pay(request: HttpRequest):
         vpn_profile.save()
 
         user = vpn_profile.user
+
+        user.is_trial = False
+        user.save()
+
         bot.send_message(user.user_id,
                          f'Оплата прошла успешно, профиль {vpn_profile.name} продлён до '
                          f'{vpn_profile.active_until.strftime("%d.%m.%Y")}',

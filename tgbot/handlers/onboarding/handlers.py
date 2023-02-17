@@ -13,7 +13,7 @@ from shop.models import VPNServer, VPNProfile
 
 from datetime import datetime, timedelta
 
-from dtb.settings import TRIAL_PERIOD_DAYS, ROOT_ADMIN_ID
+from dtb.settings import TRIAL_PERIOD_DAYS, ROOT_ADMIN_ID, MAXIMUM_PROFILES
 
 import random
 import string
@@ -196,4 +196,12 @@ def pay_handler(update: Update, context: CallbackContext) -> None:
 
 
 def new_profile_handler(update: Update, context: CallbackContext) -> None:
+    user = User.get_user(update, context)
+    if user.is_trial:
+        context.bot.send_message(user.user_id, shop_text.new_profile_trial_text)
+        return
+    if VPNProfile.objects.filter(user=user).count() >= MAXIMUM_PROFILES:
+        context.bot.send_message(user.user_id, shop_text.maximum_profiles_text)
+        return
+
     update.callback_query.edit_message_text(shop_text.new_profile_text, reply_markup=keyboards.choose_device())
