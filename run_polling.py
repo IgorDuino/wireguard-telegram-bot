@@ -25,7 +25,7 @@ def run_polling(tg_token: str = TELEGRAM_TOKEN):
 
     jq = updater.job_queue
 
-    job_minute = jq.run_repeating(onboarding_handlers.callback_minute, interval=5, first=5)
+    job_minute = jq.run_repeating(onboarding_handlers.callback_minute, interval=60*60, first=30)
 
     updater.start_polling()
     updater.idle()
