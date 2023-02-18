@@ -13,7 +13,7 @@ import string
 
 
 def rand_suffix():
-    return ''.join([random.choice(string.hexdigits) for _ in range(10)])
+    return ''.join([random.choice(string.hexdigits) for _ in range(4)])
 
 
 def empty_menu():
