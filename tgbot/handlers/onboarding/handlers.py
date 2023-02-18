@@ -241,6 +241,11 @@ def cancle_profile_handler(update: Update, context: CallbackContext) -> None:
     profile_id = update.callback_query.data.split(':')[1]
     profile = VPNProfile.objects.filter(id=profile_id).first()
     user = profile.user
+
+    wg = wireguard_client.WireguardApiClient(
+        profile.server.wireguard_api_url, profile.server.password)
+    wg.delete_client(profile.id_on_server)
+
     profile.delete()
 
     update.callback_query.edit_message_text(
