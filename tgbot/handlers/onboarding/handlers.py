@@ -224,9 +224,10 @@ def pay_handler(update: Update, context: CallbackContext) -> None:
 def new_profile_handler(update: Update, context: CallbackContext) -> None:
     user = User.get_user(update, context)
     if user.is_trial:
-        update.callback_query.edit_message_text(
-            shop_text.new_profile_trial_text, reply_markup=keyboards.main_menu(user))
-        return
+        if VPNProfile.objects.filter(user=user).count() > 0:
+            update.callback_query.edit_message_text(
+                shop_text.new_profile_trial_text, reply_markup=keyboards.main_menu(user))
+            return
     if VPNProfile.objects.filter(user=user).count() >= MAXIMUM_PROFILES:
         update.callback_query.edit_message_text(
             shop_text.maximum_profiles_text, reply_markup=keyboards.main_menu(user))
