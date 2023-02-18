@@ -236,8 +236,8 @@ def new_profile_handler(update: Update, context: CallbackContext) -> None:
 
 
 def cancle_profile_handler(update: Update, context: CallbackContext) -> None:
-    profile_server_id = update.callback_query.data.split(':')[1]
-    profile = VPNProfile.objects.filter(id_on_server=profile_server_id).first()
+    profile_id = update.callback_query.data.split(':')[1]
+    profile = VPNProfile.objects.filter(id=profile_id).first()
     user = profile.user
     profile.delete()
 
