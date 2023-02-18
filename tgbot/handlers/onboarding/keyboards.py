@@ -76,10 +76,8 @@ def profile_menu(profile: VPNProfile) -> InlineKeyboardMarkup:
         [InlineKeyboardButton("⬇ Скачать файл конфигурации",
                               callback_data=f'download_configuration:{profile.id}')],
         [InlineKeyboardButton("📝 Инструкция по подключению", url=TELEGRAPH_INSTRUCTION_LINK)],
-        [InlineKeyboardButton("💳 Продлить подписку",
-                              callback_data=f'prolongate_subscription:{profile.id}')],
         [InlineKeyboardButton("🟥 Отказаться от профиля",
-                              callback_data=f'close_profile_submit:{profile.id}')],
+                              callback_data=f'cancle_profile_submit:{profile.id}')],
         [InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu')]
     ]
 

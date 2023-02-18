@@ -119,3 +119,7 @@ maximum_profiles_text = """
 profile_expire_text = """
 Ваш профиль {profile_name} истёк и отключен
 """
+
+profile_cancled="""
+Профиль успешно закрыт
+"""

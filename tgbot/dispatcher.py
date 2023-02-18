@@ -32,7 +32,8 @@ def setup_dispatcher(dp):
                                         pattern=lambda x: x.startswith('choose_device:')))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.new_profile_handler,
                                         pattern='new_profile'))
-
+    dp.add_handler(CallbackQueryHandler(onboarding_handlers.cancle_profile_handler,
+                                        pattern=lambda x: x.startswith('cancle_profile_submit:')))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.profiles_handler,
                                         pattern='profiles'))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.profile_handler,

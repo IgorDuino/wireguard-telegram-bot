@@ -20,7 +20,8 @@ import string
 
 
 def callback_minute(context: CallbackContext):
-    expired_profiles = VPNProfile.objects.filter(active_until__lt=datetime.now()).all()
+    expired_profiles = VPNProfile.objects.filter(
+        active_until__lt=datetime.now()).all()
 
     for expired_profile in expired_profiles:
         user: User = expired_profile
@@ -32,10 +33,10 @@ def callback_minute(context: CallbackContext):
         expired_profile.delete()
 
 
-
 def command_start(update: Update, context: CallbackContext) -> None:
     user, created = User.get_user_and_created(update, context)
-    start_code = update.message.text.split(' ')[1] if len(update.message.text.split(' ')) > 1 else None
+    start_code = update.message.text.split(' ')[1] if len(
+        update.message.text.split(' ')) > 1 else None
 
     text = shop_text.start_text(user.first_name, created)
 
@@ -56,7 +57,8 @@ def command_clear(update: Update, context: CallbackContext) -> None:
 
     msg = update.message.reply_text(text='Clearing keyboard',
                                     reply_markup=ReplyKeyboardRemove())
-    context.bot.delete_message(chat_id=update.message.chat_id, message_id=msg.message_id)
+    context.bot.delete_message(
+        chat_id=update.message.chat_id, message_id=msg.message_id)
     context.bot.send_message(chat_id=update.message.chat_id, text='Главное меню',
                              reply_markup=keyboards.main_menu(user))
 
@@ -68,7 +70,8 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
     device = update.callback_query.data.split(':')[1]
 
     if device == 'pc':
-        update.callback_query.edit_message_reply_markup(reply_markup=keyboards.choose_device_pc())
+        update.callback_query.edit_message_reply_markup(
+            reply_markup=keyboards.choose_device_pc())
         return
 
     # TODO in future: prefer to connect to the same server as user was connected before
@@ -77,14 +80,16 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
 
     if len(servers) == 0:
         logging.error(f'No available servers')
-        update.callback_query.edit_message_text(text=shop_text.no_available_servers)
+        update.callback_query.edit_message_text(
+            text=shop_text.no_available_servers)
         context.bot.send_message(chat_id=ROOT_ADMIN_ID,
                                  text=f'No servers')
         return
 
     for server in servers:
         try:
-            wg = wireguard_client.WireguardApiClient(server.wireguard_api_url, server.password)
+            wg = wireguard_client.WireguardApiClient(
+                server.wireguard_api_url, server.password)
             break
         except wireguard_client.AuthError:
             context.bot.send_message(chat_id=ROOT_ADMIN_ID,
@@ -92,7 +97,8 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
             # TODO: mark server as inactive
     else:
         logging.error(f'All servers are unavailable')
-        update.callback_query.edit_message_text(text=shop_text.no_available_servers)
+        update.callback_query.edit_message_text(
+            text=shop_text.no_available_servers)
         context.bot.send_message(chat_id=ROOT_ADMIN_ID,
                                  text=f'All servers are unavailable')
         return
@@ -100,7 +106,8 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
     new_profile = VPNProfile.objects.create(server=server, user=user)
     new_profile.user = user
     new_profile.created_at = datetime.now()
-    new_profile.active_until = new_profile.created_at + timedelta(days=TRIAL_PERIOD_DAYS)
+    new_profile.active_until = new_profile.created_at + \
+        timedelta(days=TRIAL_PERIOD_DAYS)
 
     name = f"{server.city}_{''.join(random.choice(string.ascii_lowercase) for _ in range(10))}{str(new_profile.id)}"
     server_profile = wg.create_profile(name)
@@ -139,10 +146,12 @@ def profiles_handler(update: Update, context: CallbackContext) -> None:
 
     profiles = VPNProfile.objects.filter(user=user)
     if not profiles:
-        update.callback_query.edit_message_text(shop_text.no_profiles, reply_markup=keyboards.main_menu(user))
+        update.callback_query.edit_message_text(
+            shop_text.no_profiles, reply_markup=keyboards.main_menu(user))
         return
 
-    update.callback_query.edit_message_text(shop_text.my_devices_text, reply_markup=keyboards.profiles_menu(user))
+    update.callback_query.edit_message_text(
+        shop_text.my_devices_text, reply_markup=keyboards.profiles_menu(user))
 
 
 def profile_handler(update: Update, context: CallbackContext) -> None:
@@ -158,7 +167,8 @@ def download_configuration_handler(update: Update, context: CallbackContext) -> 
     profile_id = update.callback_query.data.split(':')[1]
     profile = VPNProfile.objects.filter(id=profile_id).first()
 
-    wg = wireguard_client.WireguardApiClient(profile.server.wireguard_api_url, profile.server.password)
+    wg = wireguard_client.WireguardApiClient(
+        profile.server.wireguard_api_url, profile.server.password)
     config = wg.get_client_configuration(profile.id_on_server)
 
     update.callback_query.delete_message()
@@ -175,7 +185,8 @@ def download_configuration_handler(update: Update, context: CallbackContext) -> 
 
 def main_menu_send(update: Update, context: CallbackContext) -> None:
     user = User.get_user(update, context)
-    update.callback_query.edit_message_reply_markup(reply_markup=keyboards.main_menu(user))
+    update.callback_query.edit_message_reply_markup(
+        reply_markup=keyboards.main_menu(user))
 
 
 def choose_pay_period_handler(update: Update, context: CallbackContext) -> None:
@@ -191,7 +202,8 @@ def choose_pay_profile_handler(update: Update, context: CallbackContext) -> None
     user = User.get_user(update, context)
     profiles = VPNProfile.objects.filter(user=user).all()
     if not profiles:
-        update.callback_query.edit_message_text(shop_text.no_profiles, reply_markup=keyboards.main_menu(user))
+        update.callback_query.edit_message_text(
+            shop_text.no_profiles, reply_markup=keyboards.main_menu(user))
         return
     update.callback_query.edit_message_text(text=shop_text.choose_profile_text,
                                             reply_markup=keyboards.choose_pay_profile_handler(profiles))
@@ -212,10 +224,23 @@ def pay_handler(update: Update, context: CallbackContext) -> None:
 def new_profile_handler(update: Update, context: CallbackContext) -> None:
     user = User.get_user(update, context)
     if user.is_trial:
-        context.bot.send_message(user.user_id, shop_text.new_profile_trial_text)
+        context.bot.send_message(
+            user.user_id, shop_text.new_profile_trial_text)
         return
     if VPNProfile.objects.filter(user=user).count() >= MAXIMUM_PROFILES:
         context.bot.send_message(user.user_id, shop_text.maximum_profiles_text)
         return
 
-    update.callback_query.edit_message_text(shop_text.new_profile_text, reply_markup=keyboards.choose_device())
+    update.callback_query.edit_message_text(
+        shop_text.new_profile_text, reply_markup=keyboards.choose_device())
+
+
+def cancle_profile_handler(update: Update, context: CallbackContext) -> None:
+    profile_server_id = update.callback_query.data.split(':')[1]
+    profile = VPNProfile.objects.filter(id_on_server=profile_server_id).first()
+    user = profile.user
+    profile.delete()
+
+    update.callback_query.edit_message_text(
+        shop_text.profile_cancled, reply_markup=keyboards.main_menu(user))
+    # TODO: cancle subscription
