@@ -19,6 +19,20 @@ import random
 import string
 
 
+def callback_minute(context: CallbackContext):
+    expired_profiles = VPNProfile.objects.filter(active_until__lt=datetime.now()).all()
+
+    for expired_profile in expired_profiles:
+        user: User = expired_profile
+        wg = wireguard_client.WireguardApiClient(
+            expired_profile.server.wireguard_api_url, expired_profile.server.password)
+        wg.disable_client(expired_profile.id_on_server)
+        context.bot.send_message(
+            user.user_id, shop_text.profile_expire_text.format(profile_name=expired_profile.name))
+        expired_profile.delete()
+
+
+
 def command_start(update: Update, context: CallbackContext) -> None:
     user, created = User.get_user_and_created(update, context)
     start_code = update.message.text.split(' ')[1] if len(update.message.text.split(' ')) > 1 else None

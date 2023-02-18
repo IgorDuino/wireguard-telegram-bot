@@ -115,3 +115,7 @@ new_profile_trial_text = """
 maximum_profiles_text = """
 Вы достигли максимального количества профилей
 """
+
+profile_expire_text = """
+Ваш профиль {profile_name} истёк и отключен
+"""
