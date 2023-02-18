@@ -48,8 +48,6 @@ def command_start(update: Update, context: CallbackContext) -> None:
     else:
         keyboard = keyboards.main_menu(user)
 
-    print(text)
-    print(keyboard)
     update.message.reply_text(text=text,
                               reply_markup=keyboard)
 
