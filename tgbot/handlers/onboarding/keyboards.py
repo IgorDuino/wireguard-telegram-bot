@@ -8,6 +8,13 @@ from datetime import datetime
 
 from typing import List
 
+import random
+import string
+
+
+def rand_suffix():
+    return ''.join([random.choice(string.hexdigits) for _ in range(10)])
+
 
 def empty_menu():
     return InlineKeyboardMarkup([[]])
@@ -15,10 +22,12 @@ def empty_menu():
 
 def choose_device() -> InlineKeyboardMarkup:
     buttons = [[
-        InlineKeyboardButton("📱 Android", callback_data=f'choose_device:android'),
-        InlineKeyboardButton("🍎 iOS", callback_data=f'choose_device:ios'),
+        InlineKeyboardButton(
+            "📱 Android", callback_data=f'choose_device:android:{rand_suffix()}'),
+        InlineKeyboardButton(
+            "🍎 iOS", callback_data=f'choose_device:ios:{rand_suffix()}'),
     ],
-        [InlineKeyboardButton("🖥 Компьютер (Windows, Linux, MacOS)", callback_data=f'choose_device:pc')]]
+        [InlineKeyboardButton("🖥 Компьютер (Windows, Linux, MacOS)", callback_data=f'choose_device:pc:{rand_suffix()}')]]
 
     return InlineKeyboardMarkup(buttons)
 
@@ -26,12 +35,12 @@ def choose_device() -> InlineKeyboardMarkup:
 def choose_device_pc() -> InlineKeyboardMarkup:
     buttons = [
         [
-            InlineKeyboardButton("📱 Android", callback_data=f'choose_device:android'),
-            InlineKeyboardButton("🍎 iOS", callback_data=f'choose_device:ios'),
+            InlineKeyboardButton("📱 Android", callback_data=f'choose_device:android:{rand_suffix()}'),
+            InlineKeyboardButton("🍎 iOS", callback_data=f'choose_device:ios:{rand_suffix()}'),
         ],
-        [InlineKeyboardButton("🖥️ Windows", callback_data=f'choose_device:windows')],
-        [InlineKeyboardButton("🍏 MacOS", callback_data=f'choose_device:macos'),
-         InlineKeyboardButton("🐧 Linux", callback_data=f'choose_device:linux'), ]
+        [InlineKeyboardButton("🖥️ Windows", callback_data=f'choose_device:windows:{rand_suffix()}')],
+        [InlineKeyboardButton("🍏 MacOS", callback_data=f'choose_device:macos:{rand_suffix()}'),
+         InlineKeyboardButton("🐧 Linux", callback_data=f'choose_device:linux:{rand_suffix()}'), ]
     ]
 
     return InlineKeyboardMarkup(buttons)
@@ -45,16 +54,16 @@ def main_menu(user: User) -> InlineKeyboardMarkup:
         profile_server_id = profiles[0].id_on_server
 
     buttons = [[
-        InlineKeyboardButton("💻 Мои устройства", callback_data=f'profiles'),
+        InlineKeyboardButton("💻 Мои устройства", callback_data=f'profiles:{rand_suffix()}'),
         InlineKeyboardButton("👥 Пригласить друга", url=f'{BOT_LINK}?start={user_id}'),
     ],
-        [InlineKeyboardButton("💳 Оплатить", callback_data=f'choose_pay_profile')],
-        [InlineKeyboardButton("➕ Добавить профиль", callback_data=f'new_profile')],
-        [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'support')],
+        [InlineKeyboardButton("💳 Оплатить", callback_data=f'choose_pay_profile:{rand_suffix()}')],
+        [InlineKeyboardButton("➕ Добавить профиль", callback_data=f'new_profile:{rand_suffix()}')],
+        [InlineKeyboardButton("👨‍🔧 Поддержка", callback_data=f'support:{rand_suffix()}')],
     ]
 
     if profile_server_id:
-        buttons[1] = [InlineKeyboardButton("💳 Оплатить", callback_data=f'choose_pay_period:{profile_server_id}')]
+        buttons[1] = [InlineKeyboardButton("💳 Оплатить", callback_data=f'choose_pay_period:{profile_server_id}:{rand_suffix()}')]
     return InlineKeyboardMarkup(buttons)
 
 
@@ -64,21 +73,21 @@ def profiles_menu(user: User) -> InlineKeyboardMarkup:
     for profile in profiles:
         buttons.append(
             [InlineKeyboardButton(f"{profile.name} - оплачен до {datetime.strftime(profile.active_until, '%d.%m.%Y')}",
-                                  callback_data=f'profile:{profile.id}')])
+                                  callback_data=f'profile:{profile.id}:{rand_suffix()}')])
 
-    buttons.append([InlineKeyboardButton("➕ Добавить профиль", callback_data=f'new_profile')])
-    buttons.append([InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu')])
+    buttons.append([InlineKeyboardButton("➕ Добавить профиль", callback_data=f'new_profile:{rand_suffix()}')])
+    buttons.append([InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu:{rand_suffix()}')])
     return InlineKeyboardMarkup(buttons)
 
 
 def profile_menu(profile: VPNProfile) -> InlineKeyboardMarkup:
     buttons = [
         [InlineKeyboardButton("⬇ Скачать файл конфигурации",
-                              callback_data=f'download_configuration:{profile.id}')],
+                              callback_data=f'download_configuration:{profile.id}:{rand_suffix()}')],
         [InlineKeyboardButton("📝 Инструкция по подключению", url=TELEGRAPH_INSTRUCTION_LINK)],
         [InlineKeyboardButton("🟥 Отказаться от профиля",
-                              callback_data=f'cancle_profile_submit:{profile.id}')],
-        [InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu')]
+                              callback_data=f'cancle_profile_submit:{profile.id}:{rand_suffix()}')],
+        [InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu:{rand_suffix()}')]
     ]
 
     return InlineKeyboardMarkup(buttons)
@@ -88,19 +97,19 @@ def choose_pay_profile_handler(profiles: List[VPNProfile]) -> InlineKeyboardMark
     buttons = []
     for profile in profiles:
         buttons.append([InlineKeyboardButton(f"{profile.name} - Оплачен до {profile.active_until}",
-                                             callback_data=f'choose_pay_period:{profile.id_on_server}')])
-    buttons.append([InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu')])
+                                             callback_data=f'choose_pay_period:{profile.id_on_server}:{rand_suffix()}')])
+    buttons.append([InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu:{rand_suffix()}')])
     return InlineKeyboardMarkup(buttons)
 
 
 def choose_pay_period(profile_server_id) -> InlineKeyboardMarkup:
     buttons = [
         [
-            InlineKeyboardButton("1 месяц", callback_data=f'pay:{profile_server_id}:1'),
-            InlineKeyboardButton("3 месяца", callback_data=f'pay:{profile_server_id}:3'),
-            InlineKeyboardButton("6 месяцев", callback_data=f'pay:{profile_server_id}:6'),
+            InlineKeyboardButton("1 месяц", callback_data=f'pay:{profile_server_id}:1:{rand_suffix()}'),
+            InlineKeyboardButton("3 месяца", callback_data=f'pay:{profile_server_id}:3:{rand_suffix()}'),
+            InlineKeyboardButton("6 месяцев", callback_data=f'pay:{profile_server_id}:6:{rand_suffix()}'),
         ],
-        [InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu')],
+        [InlineKeyboardButton("🔙 Главное меню", callback_data=f'main_menu:{rand_suffix()}')],
     ]
 
     return InlineKeyboardMarkup(buttons)

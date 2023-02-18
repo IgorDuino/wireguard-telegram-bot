@@ -31,11 +31,11 @@ def setup_dispatcher(dp):
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.choose_device_handler,
                                         pattern=lambda x: x.startswith('choose_device:')))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.new_profile_handler,
-                                        pattern='new_profile'))
+                                        pattern=lambda x: x.startswith('new_profile:')))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.cancle_profile_handler,
                                         pattern=lambda x: x.startswith('cancle_profile_submit:')))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.profiles_handler,
-                                        pattern='profiles'))
+                                        pattern=lambda x: x.startswith('profiles:')))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.profile_handler,
                                         pattern=lambda x: x.startswith('profile:')))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.download_configuration_handler,
@@ -46,7 +46,7 @@ def setup_dispatcher(dp):
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.choose_pay_period_handler,
                                         pattern=lambda x: x.startswith('choose_pay_period:')))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.choose_pay_profile_handler,
-                                        pattern='choose_pay_profile'))
+                                        pattern=lambda x: x.startswith('choose_pay_profile:')))
     dp.add_handler(CallbackQueryHandler(onboarding_handlers.pay_handler,
                                         pattern=lambda x: x.startswith('pay:')))
 
