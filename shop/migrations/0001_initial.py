@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -31,7 +30,8 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255, unique=True)),
                 ('ip', models.CharField(max_length=255, null=True)),
                 ('id_on_server', models.CharField(max_length=255, null=True)),
-                ('server', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='shop.vpnserver')),
+                ('server',
+                 models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='shop.vpnserver')),
                 ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='users.user')),
             ],
         ),

@@ -27,7 +27,8 @@ def choose_device() -> InlineKeyboardMarkup:
         InlineKeyboardButton(
             "🍎 iOS", callback_data=f'choose_device:ios:{rand_suffix()}'),
     ],
-        [InlineKeyboardButton("🖥 Компьютер (Windows, Linux, MacOS)", callback_data=f'choose_device:pc:{rand_suffix()}')]]
+        [InlineKeyboardButton("🖥 Компьютер (Windows, Linux, MacOS)",
+                              callback_data=f'choose_device:pc:{rand_suffix()}')]]
 
     return InlineKeyboardMarkup(buttons)
 
@@ -63,7 +64,8 @@ def main_menu(user: User) -> InlineKeyboardMarkup:
     ]
 
     if profile_server_id:
-        buttons[1] = [InlineKeyboardButton("💳 Оплатить", callback_data=f'choose_pay_period:{profile_server_id}:{rand_suffix()}')]
+        buttons[1] = [
+            InlineKeyboardButton("💳 Оплатить", callback_data=f'choose_pay_period:{profile_server_id}:{rand_suffix()}')]
     return InlineKeyboardMarkup(buttons)
 
 

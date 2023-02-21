@@ -120,6 +120,6 @@ profile_expire_text = """
 Ваш профиль {profile_name} истёк и отключен
 """
 
-profile_cancled="""
+profile_canceled = """
 Профиль успешно закрыт
 """

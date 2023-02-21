@@ -10,8 +10,6 @@ from telegram.ext import CallbackContext
 from tgbot.handlers.utils.info import extract_user_data_from_update
 from utils.models import CreateUpdateTracker, nb, CreateTracker, GetOrNoneManager
 
-import datetime
-
 
 class AdminUserManager(Manager):
     def get_queryset(self):
@@ -77,4 +75,3 @@ class User(CreateUpdateTracker):
         if self.username:
             return f'@{self.username}'
         return f"{self.first_name} {self.last_name}" if self.last_name else f"{self.first_name}"
-

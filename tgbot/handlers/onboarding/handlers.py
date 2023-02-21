@@ -107,7 +107,7 @@ def choose_device_handler(update: Update, context: CallbackContext) -> None:
     new_profile.user = user
     new_profile.created_at = datetime.now()
     new_profile.active_until = new_profile.created_at + \
-        timedelta(days=TRIAL_PERIOD_DAYS)
+                               timedelta(days=TRIAL_PERIOD_DAYS)
 
     name = f"{server.city}_{''.join(random.choice(string.ascii_lowercase) for _ in range(10))}{str(new_profile.id)}"
     server_profile = wg.create_profile(name)
@@ -249,5 +249,5 @@ def cancle_profile_handler(update: Update, context: CallbackContext) -> None:
     profile.delete()
 
     update.callback_query.edit_message_text(
-        shop_text.profile_cancled, reply_markup=keyboards.main_menu(user))
+        shop_text.profile_canceled, reply_markup=keyboards.main_menu(user))
     # TODO: cancle subscription

@@ -46,5 +46,3 @@ class UserAdmin(admin.ModelAdmin):
             return render(
                 request, "admin/broadcast_message.html", {'form': form, 'title': u'Broadcast message'}
             )
-
-
