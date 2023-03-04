@@ -209,7 +209,7 @@ def download_configuration_handler(update: Update, context: CallbackContext) -> 
 
 def main_menu_send(update: Update, context: CallbackContext) -> None:
     user = User.get_user(update, context)
-    update.callback_query.edit_message_reply_markup(
+    update.callback_query.edit_message_text(
         text="Главное меню:",
         reply_markup=keyboards.main_menu(user),
     )
