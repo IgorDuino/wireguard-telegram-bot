@@ -44,7 +44,7 @@ def invite_friend_handler(update: Update, context: CallbackContext) -> None:
     )
 
     update.callback_query.edit_message_text(
-        shop_text.my_devices_text, reply_markup=keyboards.profiles_menu(user)
+        text, reply_markup=keyboards.profiles_menu(user)
     )
 
 
