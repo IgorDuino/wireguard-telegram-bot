@@ -7,14 +7,20 @@ from telegram.ext import CallbackContext
 from dtb.settings import DEBUG
 from .manage_data import CONFIRM_DECLINE_BROADCAST, CONFIRM_BROADCAST
 from .keyboards import keyboard_confirm_decline_broadcasting
-from .static_text import broadcast_command, broadcast_wrong_format, broadcast_no_access, error_with_html, \
-    message_is_sent, declined_message_broadcasting
+from .static_text import (
+    broadcast_command,
+    broadcast_wrong_format,
+    broadcast_no_access,
+    error_with_html,
+    message_is_sent,
+    declined_message_broadcasting,
+)
 from users.models import User
 from users.tasks import broadcast_message
 
 
 def broadcast_command_with_message(update: Update, context: CallbackContext):
-    """ Type /broadcast <some_text>. Then check your message in HTML format and broadcast to users."""
+    """Type /broadcast <some_text>. Then check your message in HTML format and broadcast to users."""
     u = User.get_user(update, context)
 
     if not u.is_admin:
@@ -48,18 +54,21 @@ def broadcast_command_with_message(update: Update, context: CallbackContext):
 
 def broadcast_decision_handler(update: Update, context: CallbackContext) -> None:
     # callback_data: CONFIRM_DECLINE_BROADCAST variable from manage_data.py
-    """ Entered /broadcast <some_text>.
-        Shows text in HTML style with two buttons:
-        Confirm and Decline
+    """Entered /broadcast <some_text>.
+    Shows text in HTML style with two buttons:
+    Confirm and Decline
     """
-    broadcast_decision = update.callback_query.data[len(CONFIRM_DECLINE_BROADCAST):]
+    broadcast_decision = update.callback_query.data[len(CONFIRM_DECLINE_BROADCAST) :]
 
-    entities_for_celery = update.callback_query.message.to_dict().get('entities')
-    entities, text = update.callback_query.message.entities, update.callback_query.message.text
+    entities_for_celery = update.callback_query.message.to_dict().get("entities")
+    entities, text = (
+        update.callback_query.message.entities,
+        update.callback_query.message.text,
+    )
 
     if broadcast_decision == CONFIRM_BROADCAST:
         admin_text = message_is_sent
-        user_ids = list(User.objects.all().values_list('user_id', flat=True))
+        user_ids = list(User.objects.all().values_list("user_id", flat=True))
 
         if DEBUG:
             broadcast_message(

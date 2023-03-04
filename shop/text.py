@@ -50,19 +50,19 @@ sudo nmcli connection import type wireguard file <path_to_conf_file>
     """
 
     instructions = {
-        'android': android_instructions,
-        'ios': ios_instructions,
-        'macos': macos_instructions,
-        'linux': linux_instructions,
-        'windows': windows_instructions,
+        "android": android_instructions,
+        "ios": ios_instructions,
+        "macos": macos_instructions,
+        "linux": linux_instructions,
+        "windows": windows_instructions,
     }
 
     full_instructions_links = {
-        'android': 'https://www.wireguard.com/install/#android',
-        'ios': 'https://www.wireguard.com/install/#ios',
-        'macos': 'https://www.wireguard.com/install/#macos',
-        'linux': 'https://www.wireguard.com/install/#linux',
-        'windows': 'https://www.wireguard.com/install/#windows',
+        "android": "https://www.wireguard.com/install/#android",
+        "ios": "https://www.wireguard.com/install/#ios",
+        "macos": "https://www.wireguard.com/install/#macos",
+        "linux": "https://www.wireguard.com/install/#linux",
+        "windows": "https://www.wireguard.com/install/#windows",
     }
     # TODO: write telegra.ph articles
 

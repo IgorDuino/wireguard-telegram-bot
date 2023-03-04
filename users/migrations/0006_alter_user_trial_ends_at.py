@@ -5,13 +5,13 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('users', '0005_delete_location'),
+        ("users", "0005_delete_location"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='trial_ends_at',
+            model_name="user",
+            name="trial_ends_at",
             field=models.DateTimeField(null=True),
         ),
     ]

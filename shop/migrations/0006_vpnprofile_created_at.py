@@ -5,13 +5,13 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('shop', '0005_vpnprofile_active_until_vpnprofile_is_active'),
+        ("shop", "0005_vpnprofile_active_until_vpnprofile_is_active"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='vpnprofile',
-            name='created_at',
+            model_name="vpnprofile",
+            name="created_at",
             field=models.DateTimeField(null=True),
         ),
     ]

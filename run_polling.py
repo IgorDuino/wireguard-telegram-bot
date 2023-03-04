@@ -3,7 +3,7 @@ import django
 from telegram import Bot
 from telegram.ext import Updater
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dtb.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dtb.settings")
 django.setup()
 
 from dtb.settings import TELEGRAM_TOKEN
@@ -25,7 +25,9 @@ def run_polling(tg_token: str = TELEGRAM_TOKEN):
 
     jq = updater.job_queue
 
-    job_minute = jq.run_repeating(onboarding_handlers.callback_minute, interval=60 * 60, first=30)
+    job_minute = jq.run_repeating(
+        onboarding_handlers.callback_minute, interval=60 * 60, first=30
+    )
 
     updater.start_polling()
     updater.idle()

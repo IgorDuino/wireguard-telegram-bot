@@ -41,11 +41,20 @@ from telegram.ext import CallbackContext
 
 from users.models import User
 
-ALL_TG_FILE_TYPES = ["document", "video_note", "voice", "sticker", "audio", "video", "animation", "photo"]
+ALL_TG_FILE_TYPES = [
+    "document",
+    "video_note",
+    "voice",
+    "sticker",
+    "audio",
+    "video",
+    "animation",
+    "photo",
+]
 
 
 def _get_file_id(m: Dict) -> str:
-    """ extract file_id from message (and file type?) """
+    """extract file_id from message (and file type?)"""
 
     for doc_type in ALL_TG_FILE_TYPES:
         if doc_type in m and doc_type != "photo":
@@ -57,7 +66,7 @@ def _get_file_id(m: Dict) -> str:
 
 
 def show_file_id(update: Update, context: CallbackContext) -> None:
-    """ Returns file_id of the attached file/media """
+    """Returns file_id of the attached file/media"""
     u = User.get_user(update, context)
 
     if u.is_admin:
@@ -67,5 +76,5 @@ def show_file_id(update: Update, context: CallbackContext) -> None:
         update.message.reply_text(
             text=f"`{file_id}`",
             parse_mode=telegram.ParseMode.HTML,
-            reply_to_message_id=message_id
+            reply_to_message_id=message_id,
         )

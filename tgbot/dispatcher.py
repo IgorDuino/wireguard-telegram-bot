@@ -1,6 +1,8 @@
 from telegram.ext import (
-    Dispatcher, Filters,
-    CommandHandler, MessageHandler,
+    Dispatcher,
+    Filters,
+    CommandHandler,
+    MessageHandler,
     CallbackQueryHandler,
 )
 
@@ -28,41 +30,86 @@ def setup_dispatcher(dp):
     dp.add_handler(CommandHandler("stats", admin_handlers.stats))
 
     # Keyboard handlers
-    dp.add_handler(CallbackQueryHandler(onboarding_handlers.choose_device_handler,
-                                        pattern=lambda x: x.startswith('choose_device:')))
-    dp.add_handler(CallbackQueryHandler(onboarding_handlers.new_profile_handler,
-                                        pattern=lambda x: x.startswith('new_profile:')))
-    dp.add_handler(CallbackQueryHandler(onboarding_handlers.cancle_profile_handler,
-                                        pattern=lambda x: x.startswith('cancle_profile_submit:')))
-    dp.add_handler(CallbackQueryHandler(onboarding_handlers.profiles_handler,
-                                        pattern=lambda x: x.startswith('profiles:')))
-    dp.add_handler(CallbackQueryHandler(onboarding_handlers.profile_handler,
-                                        pattern=lambda x: x.startswith('profile:')))
-    dp.add_handler(CallbackQueryHandler(onboarding_handlers.download_configuration_handler,
-                                        pattern=lambda x: x.startswith('download_configuration:')))
+    dp.add_handler(
+        CallbackQueryHandler(
+            onboarding_handlers.choose_device_handler,
+            pattern=lambda x: x.startswith("choose_device:"),
+        )
+    )
+    dp.add_handler(
+        CallbackQueryHandler(
+            onboarding_handlers.new_profile_handler,
+            pattern=lambda x: x.startswith("new_profile:"),
+        )
+    )
+    dp.add_handler(
+        CallbackQueryHandler(
+            onboarding_handlers.cancle_profile_handler,
+            pattern=lambda x: x.startswith("cancle_profile_submit:"),
+        )
+    )
+    dp.add_handler(
+        CallbackQueryHandler(
+            onboarding_handlers.profiles_handler,
+            pattern=lambda x: x.startswith("profiles:"),
+        )
+    )
+    dp.add_handler(
+        CallbackQueryHandler(
+            onboarding_handlers.profile_handler,
+            pattern=lambda x: x.startswith("profile:"),
+        )
+    )
+    dp.add_handler(
+        CallbackQueryHandler(
+            onboarding_handlers.download_configuration_handler,
+            pattern=lambda x: x.startswith("download_configuration:"),
+        )
+    )
 
-    dp.add_handler(CallbackQueryHandler(onboarding_handlers.main_menu_send, pattern='main_menu'))
+    dp.add_handler(
+        CallbackQueryHandler(onboarding_handlers.main_menu_send, pattern="main_menu")
+    )
 
-    dp.add_handler(CallbackQueryHandler(onboarding_handlers.choose_pay_period_handler,
-                                        pattern=lambda x: x.startswith('choose_pay_period:')))
-    dp.add_handler(CallbackQueryHandler(onboarding_handlers.choose_pay_profile_handler,
-                                        pattern=lambda x: x.startswith('choose_pay_profile:')))
-    dp.add_handler(CallbackQueryHandler(onboarding_handlers.pay_handler,
-                                        pattern=lambda x: x.startswith('pay:')))
+    dp.add_handler(
+        CallbackQueryHandler(
+            onboarding_handlers.choose_pay_period_handler,
+            pattern=lambda x: x.startswith("choose_pay_period:"),
+        )
+    )
+    dp.add_handler(
+        CallbackQueryHandler(
+            onboarding_handlers.choose_pay_profile_handler,
+            pattern=lambda x: x.startswith("choose_pay_profile:"),
+        )
+    )
+    dp.add_handler(
+        CallbackQueryHandler(
+            onboarding_handlers.pay_handler, pattern=lambda x: x.startswith("pay:")
+        )
+    )
 
     # broadcast message
     dp.add_handler(
-        MessageHandler(Filters.regex(rf'^{broadcast_command}(/s)?.*'),
-                       broadcast_handlers.broadcast_command_with_message)
+        MessageHandler(
+            Filters.regex(rf"^{broadcast_command}(/s)?.*"),
+            broadcast_handlers.broadcast_command_with_message,
+        )
     )
     dp.add_handler(
-        CallbackQueryHandler(broadcast_handlers.broadcast_decision_handler, pattern=f"^{CONFIRM_DECLINE_BROADCAST}")
+        CallbackQueryHandler(
+            broadcast_handlers.broadcast_decision_handler,
+            pattern=f"^{CONFIRM_DECLINE_BROADCAST}",
+        )
     )
 
     # files
-    dp.add_handler(MessageHandler(
-        Filters.animation, files.show_file_id,
-    ))
+    dp.add_handler(
+        MessageHandler(
+            Filters.animation,
+            files.show_file_id,
+        )
+    )
 
     # handling errors
     dp.add_error_handler(error.send_stacktrace_to_tg_chat)
@@ -71,4 +118,6 @@ def setup_dispatcher(dp):
 
 
 n_workers = 0 if DEBUG else 4
-dispatcher = setup_dispatcher(Dispatcher(bot, update_queue=None, workers=n_workers, use_context=True))
+dispatcher = setup_dispatcher(
+    Dispatcher(bot, update_queue=None, workers=n_workers, use_context=True)
+)

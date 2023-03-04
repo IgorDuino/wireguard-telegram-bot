@@ -5,18 +5,18 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('shop', '0004_alter_vpnserver_city'),
+        ("shop", "0004_alter_vpnserver_city"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='vpnprofile',
-            name='active_until',
+            model_name="vpnprofile",
+            name="active_until",
             field=models.DateTimeField(null=True),
         ),
         migrations.AddField(
-            model_name='vpnprofile',
-            name='is_active',
+            model_name="vpnprofile",
+            name="is_active",
             field=models.BooleanField(default=True),
         ),
     ]

@@ -9,7 +9,7 @@ from users.models import User
 
 
 def admin(update: Update, context: CallbackContext) -> None:
-    """ Show help info about all secret admins commands """
+    """Show help info about all secret admins commands"""
     u = User.get_user(update, context)
     if not u.is_admin:
         update.message.reply_text(static_text.only_for_admins)
@@ -18,7 +18,7 @@ def admin(update: Update, context: CallbackContext) -> None:
 
 
 def stats(update: Update, context: CallbackContext) -> None:
-    """ Show help info about all secret admins commands """
+    """Show help info about all secret admins commands"""
     u = User.get_user(update, context)
     if not u.is_admin:
         update.message.reply_text(static_text.only_for_admins)
@@ -26,7 +26,9 @@ def stats(update: Update, context: CallbackContext) -> None:
 
     text = static_text.users_amount_stat.format(
         user_count=User.objects.count(),  # count may be ineffective if there are a lot of users.
-        active_24=User.objects.filter(updated_at__gte=now() - timedelta(hours=24)).count()
+        active_24=User.objects.filter(
+            updated_at__gte=now() - timedelta(hours=24)
+        ).count(),
     )
 
     update.message.reply_text(

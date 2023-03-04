@@ -7,7 +7,9 @@ from dtb.settings import TELEGRAM_TOKEN
 from users.models import User
 
 
-def from_celery_markup_to_markup(celery_markup: Optional[List[List[Dict]]]) -> Optional[InlineKeyboardMarkup]:
+def from_celery_markup_to_markup(
+    celery_markup: Optional[List[List[Dict]]],
+) -> Optional[InlineKeyboardMarkup]:
     markup = None
     if celery_markup:
         markup = []
@@ -16,9 +18,9 @@ def from_celery_markup_to_markup(celery_markup: Optional[List[List[Dict]]]) -> O
             for button in row_of_buttons:
                 row.append(
                     InlineKeyboardButton(
-                        text=button['text'],
-                        callback_data=button.get('callback_data'),
-                        url=button.get('url'),
+                        text=button["text"],
+                        callback_data=button.get("callback_data"),
+                        url=button.get("url"),
                     )
                 )
             markup.append(row)
@@ -26,16 +28,18 @@ def from_celery_markup_to_markup(celery_markup: Optional[List[List[Dict]]]) -> O
     return markup
 
 
-def from_celery_entities_to_entities(celery_entities: Optional[List[Dict]] = None) -> Optional[List[MessageEntity]]:
+def from_celery_entities_to_entities(
+    celery_entities: Optional[List[Dict]] = None,
+) -> Optional[List[MessageEntity]]:
     entities = None
     if celery_entities:
         entities = [
             MessageEntity(
-                type=entity['type'],
-                offset=entity['offset'],
-                length=entity['length'],
-                url=entity.get('url'),
-                language=entity.get('language'),
+                type=entity["type"],
+                offset=entity["offset"],
+                length=entity["length"],
+                url=entity.get("url"),
+                language=entity.get("language"),
             )
             for entity in celery_entities
         ]
@@ -43,14 +47,14 @@ def from_celery_entities_to_entities(celery_entities: Optional[List[Dict]] = Non
 
 
 def send_one_message(
-        user_id: Union[str, int],
-        text: str,
-        parse_mode: Optional[str] = telegram.ParseMode.HTML,
-        reply_markup: Optional[List[List[Dict]]] = None,
-        reply_to_message_id: Optional[int] = None,
-        disable_web_page_preview: Optional[bool] = None,
-        entities: Optional[List[MessageEntity]] = None,
-        tg_token: str = TELEGRAM_TOKEN,
+    user_id: Union[str, int],
+    text: str,
+    parse_mode: Optional[str] = telegram.ParseMode.HTML,
+    reply_markup: Optional[List[List[Dict]]] = None,
+    reply_to_message_id: Optional[int] = None,
+    disable_web_page_preview: Optional[bool] = None,
+    entities: Optional[List[MessageEntity]] = None,
+    tg_token: str = TELEGRAM_TOKEN,
 ) -> bool:
     bot = telegram.Bot(tg_token)
     try:

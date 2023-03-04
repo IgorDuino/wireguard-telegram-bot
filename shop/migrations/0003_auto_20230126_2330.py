@@ -5,18 +5,18 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('shop', '0002_vpnserver_is_active'),
+        ("shop", "0002_vpnserver_is_active"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='vpnprofile',
-            name='id',
+            model_name="vpnprofile",
+            name="id",
             field=models.AutoField(primary_key=True, serialize=False),
         ),
         migrations.AlterField(
-            model_name='vpnserver',
-            name='id',
+            model_name="vpnserver",
+            name="id",
             field=models.AutoField(primary_key=True, serialize=False),
         ),
     ]

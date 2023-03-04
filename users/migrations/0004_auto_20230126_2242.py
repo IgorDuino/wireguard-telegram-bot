@@ -6,18 +6,20 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('users', '0003_rm_unused_fields'),
+        ("users", "0003_rm_unused_fields"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='is_trial',
+            model_name="user",
+            name="is_trial",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='user',
-            name='trial_ends_at',
-            field=models.DateTimeField(blank=True, default=datetime.datetime.now, null=True),
+            model_name="user",
+            name="trial_ends_at",
+            field=models.DateTimeField(
+                blank=True, default=datetime.datetime.now, null=True
+            ),
         ),
     ]

@@ -5,16 +5,16 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('users', '0002_alter_user_user_id'),
+        ("users", "0002_alter_user_user_id"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='user',
-            name='is_banned',
+            model_name="user",
+            name="is_banned",
         ),
         migrations.RemoveField(
-            model_name='user',
-            name='is_moderator',
+            model_name="user",
+            name="is_moderator",
         ),
     ]

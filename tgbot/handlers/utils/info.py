@@ -8,7 +8,7 @@ from tgbot.main import bot
 
 
 def extract_user_data_from_update(update: Update) -> Dict:
-    """ python-telegram-bot's Update instance --> User info """
+    """python-telegram-bot's Update instance --> User info"""
     user = update.effective_user.to_dict()
 
     return dict(

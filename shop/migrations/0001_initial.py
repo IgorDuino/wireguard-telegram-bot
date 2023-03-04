@@ -8,31 +8,54 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('users', '0004_auto_20230126_2242'),
+        ("users", "0004_auto_20230126_2242"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='VPNServer',
+            name="VPNServer",
             fields=[
-                ('id', models.IntegerField(auto_created=True, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=255, unique=True)),
-                ('city', models.CharField(max_length=255)),
-                ('ip_address', models.GenericIPAddressField()),
-                ('wireguard_api_url', models.URLField(null=True)),
-                ('password', models.CharField(max_length=255)),
+                (
+                    "id",
+                    models.IntegerField(
+                        auto_created=True, primary_key=True, serialize=False
+                    ),
+                ),
+                ("name", models.CharField(max_length=255, unique=True)),
+                ("city", models.CharField(max_length=255)),
+                ("ip_address", models.GenericIPAddressField()),
+                ("wireguard_api_url", models.URLField(null=True)),
+                ("password", models.CharField(max_length=255)),
             ],
         ),
         migrations.CreateModel(
-            name='VPNProfile',
+            name="VPNProfile",
             fields=[
-                ('id', models.IntegerField(auto_created=True, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=255, unique=True)),
-                ('ip', models.CharField(max_length=255, null=True)),
-                ('id_on_server', models.CharField(max_length=255, null=True)),
-                ('server',
-                 models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='shop.vpnserver')),
-                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='users.user')),
+                (
+                    "id",
+                    models.IntegerField(
+                        auto_created=True, primary_key=True, serialize=False
+                    ),
+                ),
+                ("name", models.CharField(max_length=255, unique=True)),
+                ("ip", models.CharField(max_length=255, null=True)),
+                ("id_on_server", models.CharField(max_length=255, null=True)),
+                (
+                    "server",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="shop.vpnserver",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="users.user",
+                    ),
+                ),
             ],
         ),
     ]
