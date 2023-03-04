@@ -16,6 +16,15 @@ def start_text(first_name, is_first_time):
     return text
 
 
+def invite_friend(count: int, link: str):
+    text = f"""
+Рефералов: {count}
+Ваша пригласительная ссылка ```{link}```
+    """
+
+    return text
+
+
 def after_device_text(device):
     android_instructions = """
 1. Скачайте приложение WireGuard для Android

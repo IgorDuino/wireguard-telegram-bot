@@ -32,6 +32,12 @@ def setup_dispatcher(dp):
     # Keyboard handlers
     dp.add_handler(
         CallbackQueryHandler(
+            onboarding_handlers.invite_friend_handler,
+            pattern=lambda x: x.startswith("invite_friend:"),
+        )
+    )
+    dp.add_handler(
+        CallbackQueryHandler(
             onboarding_handlers.choose_device_handler,
             pattern=lambda x: x.startswith("choose_device:"),
         )

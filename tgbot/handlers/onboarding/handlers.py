@@ -13,7 +13,7 @@ from shop.models import VPNServer, VPNProfile
 
 from datetime import datetime, timedelta
 
-from dtb.settings import TRIAL_PERIOD_DAYS, ROOT_ADMIN_ID, MAXIMUM_PROFILES
+from dtb.settings import BOT_LINK, TRIAL_PERIOD_DAYS, ROOT_ADMIN_ID, MAXIMUM_PROFILES
 
 import random
 import string
@@ -33,6 +33,19 @@ def callback_minute(context: CallbackContext):
             shop_text.profile_expire_text.format(profile_name=expired_profile.name),
         )
         expired_profile.delete()
+
+
+def invite_friend_handler(update: Update, context: CallbackContext) -> None:
+    user = User.get_user(update, context)
+
+    text = shop_text.invite_friend(
+        User.objects.filter(deep_link=user.user_id).count(),
+        f"{BOT_LINK}?start={user.user_id}",
+    )
+
+    update.callback_query.edit_message_text(
+        shop_text.my_devices_text, reply_markup=keyboards.profiles_menu(user)
+    )
 
 
 def command_start(update: Update, context: CallbackContext) -> None:

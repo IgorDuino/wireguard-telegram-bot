@@ -82,7 +82,7 @@ def main_menu(user: User) -> InlineKeyboardMarkup:
                 "💻 Мои устройства", callback_data=f"profiles:{rand_suffix()}"
             ),
             InlineKeyboardButton(
-                "👥 Пригласить друга", url=f"{BOT_LINK}?start={user_id}"
+                "👥 Пригласить друга", callback_data=f"invite_friend:{rand_suffix()}"
             ),
         ],
         [
