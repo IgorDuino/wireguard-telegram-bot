@@ -95,11 +95,6 @@ def main_menu(user: User) -> InlineKeyboardMarkup:
                 "➕ Добавить профиль", callback_data=f"new_profile:{rand_suffix()}"
             )
         ],
-        [
-            InlineKeyboardButton(
-                "👨‍🔧 Поддержка", callback_data=f"support:{rand_suffix()}"
-            )
-        ],
     ]
 
     if profile_server_id:
